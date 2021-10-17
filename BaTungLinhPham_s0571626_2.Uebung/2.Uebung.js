@@ -2,14 +2,14 @@
 var canvasWidth = window.innerWidth;
 var canvasHeight = window.innerHeight;
 
-var playWidth = canvasWidth;
-var playHeight = playWidth / 2;
+var playWidth = canvasWidth * 0.8;
+var playHeight = canvasHeight * 0.6;
 
 var centerX = canvasWidth / 2;
 var centerY = canvasHeight / 2;
 
-var zeroPointX = centerX - playWidth / 2;
-var zeroPointY = centerY - playHeight / 2;
+var zeroPointX = canvasWidth * 25.0 / 29.7;
+var zeroPointY = canvasHeight * 15.3 / 21.0;
 
 function setup() {							/* here are program-essentials to put */
   createCanvas(windowWidth, windowHeight);
@@ -22,54 +22,35 @@ function draw() {							/* here is the dynamic part to put */
 
   /* display */
 
-  //background
+  background
   fill(210, 210, 210);
+  noStroke();
   rectMode(CENTER);
   rect(centerX, centerY, playWidth, playHeight);
 
   //playground
   fill(204, 102, 0);
-  strokeWeight(2);
-  stroke(0,0,255);
+  strokeWeight(1);
+  stroke(0, 0, 255);
 
   beginShape();
-  vertex(zeroPointX, (zeroPointY + playHeight) * 0.70);
-  vertex(zeroPointX, (zeroPointY + playHeight));
-  vertex((zeroPointX + playWidth), (zeroPointY + playHeight));
-  vertex((zeroPointX + playWidth), (zeroPointY + playHeight) * 0.9);
-  vertex((zeroPointX + playWidth) * 0.75, (zeroPointY + playHeight) * 0.9);
-  vertex((zeroPointX + playWidth) * 0.64, (zeroPointY + playHeight) * 0.8);
-  vertex((zeroPointX + playWidth) * 0.53, (zeroPointY + playHeight) * 0.9);
-  vertex((zeroPointX + playWidth) * 0.46, (zeroPointY + playHeight) * 0.9);
-  vertex((zeroPointX + playWidth) * 0.45, (zeroPointY + playHeight) * 0.95);
-  vertex((zeroPointX + playWidth) * 0.38, (zeroPointY + playHeight) * 0.95);
-  vertex((zeroPointX + playWidth) * 0.37, (zeroPointY + playHeight) * 0.9);
-  vertex((zeroPointX + playWidth) * 0.24, (zeroPointY + playHeight) * 0.9);
-  vertex((zeroPointX + playWidth) * 0.24, (zeroPointY + playHeight) * 0.95);
-  vertex((zeroPointX + playWidth) * 0.21, (zeroPointY + playHeight) * 0.95);
-  vertex((zeroPointX + playWidth) * 0.21, (zeroPointY + playHeight) * 0.9);
-  vertex((zeroPointX + playWidth) * 0.12, (zeroPointY + playHeight) * 0.9);
+  vertex(zeroPointX - playWidth * 21.4 / 23.1, zeroPointY - playHeight * 3.0 / 15.3);
+  vertex(zeroPointX - playWidth * 21.4 / 23.1, zeroPointY + playHeight * 1.2 / 15.3);
+  vertex(zeroPointX + playWidth * 1.7 / 23.1, zeroPointY + playHeight * 1.2 / 15.3);
+  vertex(zeroPointX + playWidth * 1.7 / 23.1, zeroPointY);
+  vertex(zeroPointX - playWidth * 4 / 23.1, zeroPointY);
+  vertex(zeroPointX - playWidth * 6.9 / 23.1, zeroPointY - playHeight * 1.4 / 15.3);
+  vertex(zeroPointX - playWidth * 9.8 / 23.1, zeroPointY);
+  vertex(zeroPointX - playWidth * 11.2 / 23.1, zeroPointY);
+  vertex(zeroPointX - playWidth * 11.4 / 23.1, zeroPointY + playHeight * 0.6 / 15.3);
+  vertex(zeroPointX - playWidth * 12.9 / 23.1, zeroPointY + playHeight * 0.6 / 15.3);
+  vertex(zeroPointX - playWidth * 13.1 / 23.1, zeroPointY);
+  vertex(zeroPointX - playWidth * 16 / 23.1, zeroPointY);
+  vertex(zeroPointX - playWidth * 16 / 23.1, zeroPointY + playHeight * 0.6 / 15.3);
+  vertex(zeroPointX - playWidth * 16.6 / 23.1, zeroPointY + playHeight * 0.6 / 15.3);
+  vertex(zeroPointX - playWidth * 16.6 / 23.1, zeroPointY);
+  vertex(zeroPointX - playWidth * 18.6 / 23.1, zeroPointY);
   endShape(CLOSE);
-
-  //flag
-  stroke(0,0,0);
-  strokeWeight(4);
-  noFill()
-
-  beginShape();
-  vertex((zeroPointX + playWidth) * 0.18, (zeroPointY + playHeight) * 0.65);
-  vertex((zeroPointX + playWidth) * 0.18, (zeroPointY + playHeight) * 0.9);
-  endShape();
-
-  stroke(0,0,255);
-  fill(255,255,0);
-  strokeWeight(3);
-
-  beginShape();
-  vertex((zeroPointX + playWidth) * 0.18, (zeroPointY + playHeight) * 0.66);
-  vertex((zeroPointX + playWidth) * 0.12, (zeroPointY + playHeight) * 0.68);
-  vertex((zeroPointX + playWidth) * 0.18, (zeroPointY + playHeight) * 0.70);
-  endShape();
 
   //sand
   stroke(153, 102, 0);
@@ -77,58 +58,44 @@ function draw() {							/* here is the dynamic part to put */
   strokeWeight(4);
 
   beginShape();
-  vertex(zeroPointX, (zeroPointY + playHeight) * 0.70);
-  vertex((zeroPointX + playWidth) * 0.12, (zeroPointY + playHeight) * 0.9);
-  vertex((zeroPointX + playWidth) * 0.21, (zeroPointY + playHeight) * 0.9);
+  vertex(zeroPointX - playWidth * 21.4 / 23.1, zeroPointY - playHeight * 3.0 / 15.3);
+  vertex(zeroPointX - playWidth * 18.6 / 23.1, zeroPointY);
+  vertex(zeroPointX - playWidth * 16.6 / 23.1, zeroPointY);
   endShape();
 
   //grass
   stroke(0, 51, 0);
 
   beginShape();
-  vertex((zeroPointX + playWidth), (zeroPointY + playHeight) * 0.9);
-  vertex((zeroPointX + playWidth) * 0.97, (zeroPointY + playHeight) * 0.9);
+  vertex(zeroPointX - playWidth * 16 / 23.1, zeroPointY);
+  vertex(zeroPointX - playWidth * 13.1 / 23.1, zeroPointY);
   endShape();
 
   beginShape();
-  vertex((zeroPointX + playWidth) * 0.85, (zeroPointY + playHeight) * 0.9);
-  vertex((zeroPointX + playWidth) * 0.75, (zeroPointY + playHeight) * 0.9);
-  vertex((zeroPointX + playWidth) * 0.64, (zeroPointY + playHeight) * 0.8);
-  vertex((zeroPointX + playWidth) * 0.53, (zeroPointY + playHeight) * 0.9);
-  vertex((zeroPointX + playWidth) * 0.46, (zeroPointY + playHeight) * 0.9);
-  endShape();
-
-  beginShape();
-  vertex((zeroPointX + playWidth) * 0.24, (zeroPointY + playHeight) * 0.9);
-  vertex((zeroPointX + playWidth) * 0.37, (zeroPointY + playHeight) * 0.9);
-  endShape();
-
-  //standpoint
-  stroke(0, 153, 0);
-
-  beginShape();
-  vertex((zeroPointX + playWidth) * 0.85, (zeroPointY + playHeight) * 0.9);
-  vertex((zeroPointX + playWidth) * 0.97, (zeroPointY + playHeight) * 0.9);
+  vertex(zeroPointX + playWidth * 1.7 / 23.1, zeroPointY);
+  vertex(zeroPointX - playWidth * 4 / 23.1, zeroPointY);
+  vertex(zeroPointX - playWidth * 6.9 / 23.1, zeroPointY - playHeight * 1.4 / 15.3);
+  vertex(zeroPointX - playWidth * 9.8 / 23.1, zeroPointY);
+  vertex(zeroPointX - playWidth * 11.2 / 23.1, zeroPointY);
   endShape();
 
   //water
   fill(0, 0, 255);
   strokeWeight(1);
-  stroke(0,0,255);
+  stroke(0, 0, 255);
 
   beginShape();
-  vertex((zeroPointX + playWidth) * 0.458, (zeroPointY + playHeight) * 0.91);
-  vertex((zeroPointX + playWidth) * 0.45, (zeroPointY + playHeight) * 0.95);
-  vertex((zeroPointX + playWidth) * 0.38, (zeroPointY + playHeight) * 0.95);
-  vertex((zeroPointX + playWidth) * 0.372, (zeroPointY + playHeight) * 0.91);
+  vertex(zeroPointX - playWidth * 11.25 / 23.1, zeroPointY + playHeight * 0.2 / 15.3);
+  vertex(zeroPointX - playWidth * 11.4 / 23.1, zeroPointY + playHeight * 0.6 / 15.3);
+  vertex(zeroPointX - playWidth * 12.9 / 23.1, zeroPointY + playHeight * 0.6 / 15.3);
+  vertex(zeroPointX - playWidth * 13.05 / 23.1, zeroPointY + playHeight * 0.2 / 15.3);
   endShape(CLOSE);
 
   //balls
   fill(255, 150, 0);
   stroke(255, 150, 0);
 
-  ellipse((zeroPointX + playWidth) * 0.89, (zeroPointY + playHeight) * 0.9 - (zeroPointX + playWidth) * 0.008, (zeroPointX + playWidth) * 0.016, (zeroPointX + playWidth) * 0.016);
-  ellipse((zeroPointX + playWidth) * 0.74, (zeroPointY + playHeight) * 0.79, (zeroPointX + playWidth) * 0.016, (zeroPointX + playWidth) * 0.016)
+  ellipse(zeroPointX, zeroPointY - playWidth * 0.2 / 23.1, playWidth * 0.4 / 23.1);
 }
 
 function windowResized() {					/* responsive part */
