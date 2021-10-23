@@ -9,15 +9,24 @@ var canvasHeight = window.innerHeight;
 var s; // scale
 var x, y; // Coordinate
 
-var basicLength = 5; // in [m]
-var bodyHeight = 1.8; //  in [m]
-var playgroundWidth = basicLength * 23.9 / 16.9; //  in [m]
+var basicLength = 5; // [m]
+var bodyHeight = 1.8; //  [m]
+var playgroundWidth = basicLength * 23.9 / 16.9; // [m]
 
 var xBall, yBall; // golf ball
 var dBall = 0.1; // ball diameter in [m]
-var colorBall = "#aaaa00"; //ball color
+var ballColor = "#aaaa00"; //ball color
+var ballSpeed = 3.6; // [m/s]
+var moveBall = false;
+
+var newBtnXPos, newBtnYPos;
+var resetBtnXPos, resetBtnYPos;
+
+const fps = 60;
+var t; // frame duration
 
 function setup() { /* prepare program */
+    frameRate(fps);
     createCanvas(windowWidth, windowHeight);
     evaluateConstants();
 
@@ -25,35 +34,38 @@ function setup() { /* prepare program */
     x = 25.0 * canvasWidth / 29.7;
     y = 15.3 * canvasHeight / 21.0;
 
-    xBall = 0;
-    yBall = dBall / 2;
+    newBtnXPos = 80 * gridX;
+    newBtnYPos = 90 * gridY;
+
+    resetBtnXPos = 10 * gridX;
+    resetBtnYPos = 90 * gridY;
+
+    t = 1 / fps;
+
+    resetBallState();
 }
 
 function draw() {
-    background(200);
     /* administration */
+    background(200);
 
-    //Intro text
-    push();
-    textAlign(CENTER, CENTER);
-    textSize(2.5 * fontSize);
-    text("The Golf Game", 50 * gridX, 10 * gridY);
-    textSize(2.0 * fontSize);
-
-    //Buttons
-
+    // Buttons
     // NEW-Button
+    push();
     fill('#00ff00');
-    rect(80 * gridX, 90 * gridY, buttonWidth, buttonHeight);
+    textAlign(CENTER, CENTER);
+    textSize(2.0 * fontSize);
+    rect(newBtnXPos, newBtnYPos, buttonWidth, buttonHeight);
     fill(0);
-    text("NEW", 80 * gridX + 0.5 * buttonWidth, 90 * gridY + 0.5 * buttonHeight);
+    text("NEW", newBtnXPos + 0.5 * buttonWidth, newBtnYPos + 0.5 * buttonHeight);
 
     // RESET-Button
     fill('#ff0000');
-    rect(10 * gridX, 90 * gridY, buttonWidth, buttonHeight);
+    rect(resetBtnXPos, resetBtnYPos, buttonWidth, buttonHeight);
     fill(0);
-    text("RESET", 10 * gridX + 0.5 * buttonWidth, 90 * gridY + 0.5 * buttonHeight);
+    text("RESET", resetBtnXPos + 0.5 * buttonWidth, resetBtnYPos + 0.5 * buttonHeight);
     pop();
+
     /* calculation */
 
     /* display */
@@ -65,7 +77,8 @@ function draw() {
     playGround();
 
     //Golf ball
-    fill(colorBall);
+    fill(ballColor);
+    shotBall();
     ellipse(xBall * s, yBall * s, dBall * s);
 
     //Zero-point marker

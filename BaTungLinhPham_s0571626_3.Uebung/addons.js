@@ -78,3 +78,34 @@ function playGround() {
     pop();
     pop();
 }
+
+function resetBallState() {
+    xBall = 0;
+    yBall = dBall / 2;
+    moveBall = false;
+}
+
+function shotBall() {
+    if (moveBall && xBall >= pgPoints[2][0]) {
+        xBall = xBall - t * ballSpeed;
+    }
+
+    if (xBall == pgPoints[2][0]) {
+        moveBall = false;
+    }
+}
+
+function mouseClicked() {
+    if (mouseX > newBtnXPos &&
+        mouseX < newBtnXPos + buttonWidth &&
+        mouseY > newBtnYPos &&
+        mouseY < newBtnYPos + buttonHeight) {
+        moveBall = true;
+    }
+    if (mouseX > resetBtnXPos &&
+        mouseX < resetBtnXPos + buttonWidth &&
+        mouseY > resetBtnYPos &&
+        mouseY < resetBtnYPos + buttonHeight) {
+        resetBallState();
+    }
+}
