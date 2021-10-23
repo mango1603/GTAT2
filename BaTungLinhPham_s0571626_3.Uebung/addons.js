@@ -94,18 +94,3 @@ function shotBall() {
         moveBall = false;
     }
 }
-
-function mouseClicked() {
-    if (mouseX > newBtnXPos &&
-        mouseX < newBtnXPos + buttonWidth &&
-        mouseY > newBtnYPos &&
-        mouseY < newBtnYPos + buttonHeight) {
-        moveBall = true;
-    }
-    if (mouseX > resetBtnXPos &&
-        mouseX < resetBtnXPos + buttonWidth &&
-        mouseY > resetBtnYPos &&
-        mouseY < resetBtnYPos + buttonHeight) {
-        resetBallState();
-    }
-}
