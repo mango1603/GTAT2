@@ -89,11 +89,11 @@ function resetBallState() {
 
 function getBallPos() {
     if (xBall > pgPoints[2][0] && xBall <= pgPoints[1][0]) {
-        state = "AB";
+        state = 1;
     } else if (xBall > pgPoints[3][0] && xBall <= pgPoints[2][0]) {
-        state = "BC";
+        state = 2;
     } else {
-        state = "null";
+        state = 0;
     }
 }
 
@@ -112,14 +112,14 @@ function shotBall() {
         var dir = getDirection();
         s = xBall;
 
-        if (state == "AB") {
+        if (state == 1) {
             if (dir == 1) {
                 xBall = s - dt * v0;
             } else {
                 xBall = s + dt * v0;
             }
             yBall = dBall / 2;
-        } else if (state == "BC") {
+        } else if (state == 2) {
             t = t + dt;
             xBall = s1 - t * v0 + g_ * sq(t) / 2;
             yBall = dBall / 2 - (xBall - s1) * tan(rad);
