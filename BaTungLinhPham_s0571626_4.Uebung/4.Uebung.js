@@ -7,7 +7,7 @@ var canvasWidth = window.innerWidth;
 var canvasHeight = window.innerHeight;
 
 var M; // scale
-var x, y; // Coordinate
+var x0, y0; // Coordinate
 
 var basicLength = 5; // [m]
 var bodyHeight = 1.8; //  [m]
@@ -23,9 +23,17 @@ var newBtnXPos, newBtnYPos;
 var resetBtnXPos, resetBtnYPos;
 
 const fps = 60;
-var dt, dt;
+var t;
+var dt;
+
 const g = 9.81;
-var s, del;
+var g_;
+var rad;
+let v1, v2;
+
+var state;
+
+var s1, s;
 
 function setup() { /* prepare program */
     frameRate(fps);
@@ -33,15 +41,24 @@ function setup() { /* prepare program */
     evaluateConstants();
 
     M = 0.85 * canvasWidth / playgroundWidth
-    x = 25.0 * canvasWidth / 29.7;
-    y = 15.3 * canvasHeight / 21.0;
+    x0 = 25.0 * canvasWidth / 29.7;
+    y0 = 15.3 * canvasHeight / 21.0;
 
     newBtnXPos = 80 * gridX;
     newBtnYPos = 90 * gridY;
 
     resetBtnXPos = 10 * gridX;
     resetBtnYPos = 90 * gridY;
+
     dt = 1 / fps;
+
+    s1 = pgPoints[2][0];
+
+    translate(x0, y0);
+    v1 = createVector(pgPoints[1][0] - pgPoints[2][0], pgPoints[1][1] - pgPoints[2][1]);
+    v2 = createVector(pgPoints[2][0] - pgPoints[3][0], pgPoints[2][1] - pgPoints[3][1]);
+    rad = v2.angleBetween(v1);
+    g_ = g * sin(rad);
 
     resetBallState();
 }
@@ -67,49 +84,22 @@ function draw() {
     text("RESET", resetBtnXPos + 0.5 * buttonWidth, resetBtnYPos + 0.5 * buttonHeight);
     pop();
 
+
     /* calculation */
-    if (moveBall) {
-        if (xBall >= pgPoints[2][0]) {
-            t = t + dt;
-            xBall = -t * v0;
-        } else if (xBall >= pgPoints[3][0] && xBall < pgPoints[2][0]) {
-
-        }
-    }
-
-
-
 
     /* display */
 
     //Playground
     push();
-    translate(x, y);
+    translate(x0, y0);
     scale(1, -1);
     playGround();
 
     //Golf ball
     fill(ballColor);
-    //shotBall();
+    getBallPos();
+    shotBall();
     ellipse(xBall * M, yBall * M, dBall * M);
-
-
-    push();
-    translate(x, y);
-    push();
-    // translate(x0, y0);
-    // s = Math.sqrt(Math.pow(xBall, 2) + Math.pow(yBall, 2));
-    // del = Math.atan(yBall / xBall);
-    // rotate(del);
-    // xBall = s * Math.cos(del);
-    // yBall = s * Math.sin(del);
-    ellipse(xBall * M, yBall * M, dBall * M);
-    // ellipse();
-    // pop();
-    // // pop();
-    //s= 
-    // xBall = s * cosB;
-    // yBall = s * sinB;
 
 
     //Zero-point marker
@@ -121,8 +111,6 @@ function draw() {
     pop();
 
     pop();
-
-
 }
 
 function windowResized() { /* responsive design */

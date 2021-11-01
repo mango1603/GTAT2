@@ -84,4 +84,47 @@ function resetBallState() {
     yBall = dBall / 2;
     moveBall = false;
     t = 0;
+    s = 1;
+}
+
+function getBallPos() {
+    if (xBall > pgPoints[2][0] && xBall <= pgPoints[1][0]) {
+        state = "AB";
+    } else if (xBall > pgPoints[3][0] && xBall <= pgPoints[2][0]) {
+        state = "BC";
+    } else {
+        state = "null";
+    }
+}
+
+function getDirection() {
+    if (xBall < s) {
+        return 1;
+    } else if (xBall = s) {
+        return 0;
+    } else if (xBall > s) {
+        return -1;
+    }
+}
+
+function shotBall() {
+    if (moveBall) {
+        var dir = getDirection();
+        s = xBall;
+
+        if (state == "AB") {
+            if (dir == 1) {
+                xBall = s - dt * v0;
+            } else {
+                xBall = s + dt * v0;
+            }
+            yBall = dBall / 2;
+        } else if (state == "BC") {
+            t = t + dt;
+            xBall = s1 - t * v0 + g_ * sq(t) / 2;
+            yBall = dBall / 2 - (xBall - s1) * tan(rad);
+        } else {
+            moveBall = false;
+        }
+    }
 }
