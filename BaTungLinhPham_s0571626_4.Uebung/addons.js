@@ -90,7 +90,7 @@ function resetBallState() {
 function getDirection(current, last) {
     if (current < last) {
         return 1;
-    } else if (current = last) {
+    } else if (current == last) {
         return 0;
     } else if (current > last) {
         return -1;
@@ -105,7 +105,7 @@ function shotBall() {
         if (xBall > pgPoints[2][0] && xBall <= pgPoints[1][0]) {
             if (dir == 1) {
                 xBall = s - dt * v0;
-            } else {
+            } else if (dir == -1) {
                 xBall = s + dt * v0;
             }
             yBall = dBall / 2;
