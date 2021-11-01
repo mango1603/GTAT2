@@ -87,43 +87,35 @@ function resetBallState() {
     s = 1;
 }
 
-function getBallPos() {
-    if (xBall > pgPoints[2][0] && xBall <= pgPoints[1][0]) {
-        state = 1;
-    } else if (xBall > pgPoints[3][0] && xBall <= pgPoints[2][0]) {
-        state = 2;
-    } else {
-        state = 0;
-    }
-}
-
-function getDirection() {
-    if (xBall < s) {
+function getDirection(current, last) {
+    if (current < last) {
         return 1;
-    } else if (xBall = s) {
+    } else if (current = last) {
         return 0;
-    } else if (xBall > s) {
+    } else if (current > last) {
         return -1;
     }
 }
 
 function shotBall() {
     if (moveBall) {
-        var dir = getDirection();
+        var dir = getDirection(xBall, s);
         s = xBall;
 
-        if (state == 1) {
+        if (xBall > pgPoints[2][0] && xBall <= pgPoints[1][0]) {
             if (dir == 1) {
                 xBall = s - dt * v0;
             } else {
                 xBall = s + dt * v0;
             }
             yBall = dBall / 2;
-        } else if (state == 2) {
+        } else if (xBall <= pgPoints[2][0]) {
             t = t + dt;
             xBall = s1 - t * v0 + g_ * sq(t) / 2;
             yBall = dBall / 2 - (xBall - s1) * tan(rad);
-        } else {
+        }
+
+        if (xBall > pgPoints[1][0]) {
             moveBall = false;
         }
     }

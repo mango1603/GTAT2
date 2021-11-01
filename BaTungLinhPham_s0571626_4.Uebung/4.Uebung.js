@@ -31,8 +31,6 @@ var g_;
 var rad;
 let v1, v2;
 
-var state;
-
 var s1, s;
 
 function setup() { /* prepare program */
@@ -97,7 +95,6 @@ function draw() {
 
     //Golf ball
     fill(ballColor);
-    getBallPos();
     shotBall();
     ellipse(xBall * M, yBall * M, dBall * M);
 
