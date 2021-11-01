@@ -46,13 +46,13 @@ function evaluateConstants() {
 function playGround() {
     //Water hole
     fill(0, 0, 200);
-    rect(pgPoints[8][0] * s, pgPoints[7][1] * s, (pgPoints[5][0] - pgPoints[8][0]) * s, 0.9 * (pgPoints[5][1] - pgPoints[6][1]) * s);
+    rect(pgPoints[8][0] * M, pgPoints[7][1] * M, (pgPoints[5][0] - pgPoints[8][0]) * M, 0.9 * (pgPoints[5][1] - pgPoints[6][1]) * M);
 
     // Playground
     fill(100, 50, 0);
     beginShape();
     for (var i = 0; i < pgPoints.length; i++)
-        vertex(pgPoints[i][0] * s, pgPoints[i][1] * s);
+        vertex(pgPoints[i][0] * M, pgPoints[i][1] * M);
     endShape();
 
     //Pitch
@@ -63,9 +63,9 @@ function playGround() {
     stroke(0, 200, 0);
     beginShape();
     for (var i = 1; i < 6; i++)
-        vertex(pgPoints[i][0] * s, pgPoints[i][1] * s);
+        vertex(pgPoints[i][0] * M, pgPoints[i][1] * M);
     endShape();
-    line(pgPoints[8][0] * s, pgPoints[8][1] * s, pgPoints[9][0] * s, pgPoints[9][1] * s);
+    line(pgPoints[8][0] * M, pgPoints[8][1] * M, pgPoints[9][0] * M, pgPoints[9][1] * M);
     pop();
 
     //Sand
@@ -73,7 +73,7 @@ function playGround() {
     stroke(200, 200, 0);
     beginShape();
     for (var i = 12; i < 15; i++)
-        vertex(pgPoints[i][0] * s, pgPoints[i][1] * s);
+        vertex(pgPoints[i][0] * M, pgPoints[i][1] * M);
     endShape();
     pop();
     pop();
@@ -83,14 +83,5 @@ function resetBallState() {
     xBall = 0;
     yBall = dBall / 2;
     moveBall = false;
-}
-
-function shotBall() {
-    if (moveBall && xBall >= pgPoints[2][0]) {
-        xBall = xBall - t * ballSpeed;
-    }
-
-    if (xBall == pgPoints[2][0]) {
-        moveBall = false;
-    }
+    t = 0;
 }

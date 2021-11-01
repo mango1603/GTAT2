@@ -6,7 +6,7 @@
 var canvasWidth = window.innerWidth;
 var canvasHeight = window.innerHeight;
 
-var s; // scale
+var M; // scale
 var x, y; // Coordinate
 
 var basicLength = 5; // [m]
@@ -16,21 +16,23 @@ var playgroundWidth = basicLength * 23.9 / 16.9; // [m]
 var xBall, yBall; // golf ball
 var dBall = 0.1; // ball diameter in [m]
 var ballColor = "#aaaa00"; //ball color
-var ballSpeed = 3.6; // [m/s]
+var v0 = 2.0; // [m/s]
 var moveBall = false;
 
 var newBtnXPos, newBtnYPos;
 var resetBtnXPos, resetBtnYPos;
 
 const fps = 60;
-var t; // frame duration
+var dt, dt;
+const g = 9.81;
+var s, del;
 
 function setup() { /* prepare program */
     frameRate(fps);
     createCanvas(windowWidth, windowHeight);
     evaluateConstants();
 
-    s = 0.85 * canvasWidth / playgroundWidth
+    M = 0.85 * canvasWidth / playgroundWidth
     x = 25.0 * canvasWidth / 29.7;
     y = 15.3 * canvasHeight / 21.0;
 
@@ -39,8 +41,7 @@ function setup() { /* prepare program */
 
     resetBtnXPos = 10 * gridX;
     resetBtnYPos = 90 * gridY;
-
-    t = 1 / fps;
+    dt = 1 / fps;
 
     resetBallState();
 }
@@ -67,6 +68,17 @@ function draw() {
     pop();
 
     /* calculation */
+    if (moveBall) {
+        if (xBall >= pgPoints[2][0]) {
+            t = t + dt;
+            xBall = -t * v0;
+        } else if (xBall >= pgPoints[3][0] && xBall < pgPoints[2][0]) {
+
+        }
+    }
+
+
+
 
     /* display */
 
@@ -78,8 +90,27 @@ function draw() {
 
     //Golf ball
     fill(ballColor);
-    shotBall();
-    ellipse(xBall * s, yBall * s, dBall * s);
+    //shotBall();
+    ellipse(xBall * M, yBall * M, dBall * M);
+
+
+    push();
+    translate(x, y);
+    push();
+    // translate(x0, y0);
+    // s = Math.sqrt(Math.pow(xBall, 2) + Math.pow(yBall, 2));
+    // del = Math.atan(yBall / xBall);
+    // rotate(del);
+    // xBall = s * Math.cos(del);
+    // yBall = s * Math.sin(del);
+    ellipse(xBall * M, yBall * M, dBall * M);
+    // ellipse();
+    // pop();
+    // // pop();
+    //s= 
+    // xBall = s * cosB;
+    // yBall = s * sinB;
+
 
     //Zero-point marker
     push();
@@ -91,19 +122,7 @@ function draw() {
 
     pop();
 
-    //tips
-    // push();
-    // translate(xio, yio);
-    // push();
-    // translate(x0, y0);
-    // rotate(sinB);
-    // ellipse();
-    // ellipse();
-    // pop();
-    // // pop();
-    //s= 
-    // xBall = s * cosB;
-    // yBall = s * sinB;
+
 }
 
 function windowResized() { /* responsive design */
