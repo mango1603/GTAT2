@@ -108,7 +108,6 @@ function shotBall() {
         sx = xBall;
         v1x = v1 * cos(rad);
         v1y = v1 * sin(rad);
-        console.log(v1);
 
         //1st plane
         if (xBall > pgPoints[2][0] && xBall <= pgPoints[1][0]) {
@@ -126,7 +125,7 @@ function shotBall() {
         else if (xBall <= pgPoints[2][0] && xBall > pgPoints[3][0]) {
             t = t + dt;
             v = g_ * t / 2 - v0;
-            v1 = Math.abs(v);
+            v1 = Math.abs(v); //get the speed after leaving the 1st slope
             xBall = sx1 + t * v;
             yBall = sy - (xBall - sx1) * tan(rad);
         }
@@ -141,23 +140,4 @@ function shotBall() {
             START = false;
         }
     }
-}
-
-
-//kart. to intern
-function kXi(a) {
-    return (a + x0);
-}
-
-function kYi(b) {
-    return (y0 - b);
-}
-
-//intern to kart
-function iXk(a) {
-    return (a - x0);
-}
-
-function iYk(b) {
-    return (y0 - b);
 }
