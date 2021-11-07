@@ -1,5 +1,5 @@
 /** GTAT2 Game Technology & Interactive Systems **/
-/** 3. Übung  **/
+/** 5. Übung  **/
 /** Implementation based on 2. Übung-Lösung from Dr.-Ing. V. Naumburger*/
 /************************************************************************************/
 
@@ -80,11 +80,16 @@ function playGround() {
 }
 
 function resetBallState() {
+    sx = 1;
+    sx1 = pgPoints[2][0];
+    sx2 = pgPoints[3][0];
+    sy = dBall / 2;
+    sy2 = pgPoints[3][1] + sy;
     xBall = 0;
     yBall = dBall / 2;
-    moveBall = false;
+    START = false;
     t = 0;
-    s = 1;
+    t2 = 0;
 }
 
 function getDirection(current, last) {
@@ -98,25 +103,61 @@ function getDirection(current, last) {
 }
 
 function shotBall() {
-    if (moveBall) {
-        var dir = getDirection(xBall, s);
-        s = xBall;
+    if (START) {
+        var dir = getDirection(xBall, sx);
+        sx = xBall;
+        v1x = v1 * cos(rad);
+        v1y = v1 * sin(rad);
+        console.log(v1);
 
+        //1st plane
         if (xBall > pgPoints[2][0] && xBall <= pgPoints[1][0]) {
+            //movement from the right to the left
             if (dir == 1) {
-                xBall = s - dt * v0;
-            } else if (dir == -1) {
-                xBall = s + dt * v0;
+                xBall = sx - dt * v0;
+            }
+            //movement from the left to the right
+            else if (dir == -1) {
+                xBall = sx + dt * v0;
             }
             yBall = dBall / 2;
-        } else if (xBall <= pgPoints[2][0]) {
-            t = t + dt;
-            xBall = s1 - t * v0 + g_ * sq(t) / 2;
-            yBall = dBall / 2 - (xBall - s1) * tan(rad);
         }
-
+        //1st slope 
+        else if (xBall <= pgPoints[2][0] && xBall > pgPoints[3][0]) {
+            t = t + dt;
+            v = g_ * t / 2 - v0;
+            v1 = Math.abs(v);
+            xBall = sx1 + t * v;
+            yBall = sy - (xBall - sx1) * tan(rad);
+        }
+        //after 1st slope
+        else if (xBall <= pgPoints[3][0]) {
+            t2 = t2 + dt;
+            xBall = sx2 - v1x * t2;
+            yBall = sy2 - g * sq(t2) / 2 + v1y * t2;
+        }
+        //ball reach the end of the right side
         if (xBall > pgPoints[1][0]) {
-            moveBall = false;
+            START = false;
         }
     }
+}
+
+
+//kart. to intern
+function kXi(a) {
+    return (a + x0);
+}
+
+function kYi(b) {
+    return (y0 - b);
+}
+
+//intern to kart
+function iXk(a) {
+    return (a - x0);
+}
+
+function iYk(b) {
+    return (y0 - b);
 }

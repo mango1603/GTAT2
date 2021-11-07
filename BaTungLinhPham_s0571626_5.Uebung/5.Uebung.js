@@ -16,22 +16,26 @@ var playgroundWidth = basicLength * 23.9 / 16.9; // [m]
 var xBall, yBall; // golf ball
 var dBall = 0.1; // ball diameter in [m]
 var ballColor = "#aaaa00"; //ball color
-var v0 = 2.0; // [m/s]
-var moveBall = false;
+var v0 = 3.8; // start speed [m/s]
+var v1 = 0;
+var v1x, v1y;
+var v; // current speed
+var START = false;
 
 var newBtnXPos, newBtnYPos;
 var resetBtnXPos, resetBtnYPos;
 
 const fps = 60;
-var t;
+var t, t2;
 var dt;
 
 const g = 9.81;
 var g_;
 var rad;
-let v1, v2;
+let vec1, vec2;
 
-var s1, s;
+var sx, sx1, sx2;
+var sy, sy2;
 
 function setup() { /* prepare program */
     frameRate(fps);
@@ -50,12 +54,10 @@ function setup() { /* prepare program */
 
     dt = 1 / fps;
 
-    s1 = pgPoints[2][0];
-
     translate(x0, y0);
-    v1 = createVector(pgPoints[1][0] - pgPoints[2][0], pgPoints[1][1] - pgPoints[2][1]);
-    v2 = createVector(pgPoints[2][0] - pgPoints[3][0], pgPoints[2][1] - pgPoints[3][1]);
-    rad = v2.angleBetween(v1);
+    vec1 = createVector(pgPoints[1][0] - pgPoints[2][0], pgPoints[1][1] - pgPoints[2][1]);
+    vec2 = createVector(pgPoints[2][0] - pgPoints[3][0], pgPoints[2][1] - pgPoints[3][1]);
+    rad = vec2.angleBetween(vec1);
     g_ = g * sin(rad);
 
     resetBallState();
@@ -82,7 +84,6 @@ function draw() {
     text("RESET", resetBtnXPos + 0.5 * buttonWidth, resetBtnYPos + 0.5 * buttonHeight);
     pop();
 
-
     /* calculation */
 
     /* display */
@@ -98,13 +99,12 @@ function draw() {
     shotBall();
     ellipse(xBall * M, yBall * M, dBall * M);
 
-
     //Zero-point marker
     push();
     stroke(0);
     strokeWeight(2);
-    line(10, 0, -10, 0);
-    line(0, 10, 0, -10);
+    line(5, 0, -5, 0);
+    line(0, 5, 0, -5);
     pop();
 
     pop();
@@ -121,7 +121,7 @@ function mouseClicked() {
         mouseX < newBtnXPos + buttonWidth &&
         mouseY > newBtnYPos &&
         mouseY < newBtnYPos + buttonHeight) {
-        moveBall = true;
+        START = true;
     }
     if (mouseX > resetBtnXPos &&
         mouseX < resetBtnXPos + buttonWidth &&
