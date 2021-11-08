@@ -105,7 +105,7 @@ function getDirection(current, last) {
 function shotBall() {
     if (START) {
         var dir = getDirection(xBall, sx);
-        sx = xBall;
+        sx = xBall; //last position
         v1x = v1 * cos(rad);
         v1y = v1 * sin(rad);
 
@@ -124,7 +124,7 @@ function shotBall() {
         //1st slope 
         else if (xBall <= pgPoints[2][0] && xBall > pgPoints[3][0]) {
             t = t + dt;
-            v = g_ * t / 2 - v0;
+            v = g_ * t / 2 - v0; //current speed
             v1 = Math.abs(v); //get the speed after leaving the 1st slope
             xBall = sx1 + t * v;
             yBall = sy - (xBall - sx1) * tan(rad);
