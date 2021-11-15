@@ -13,20 +13,20 @@ var basicLength = 5; // [m]
 var bodyHeight = 1.8; //  [m]
 var playgroundWidth = basicLength * 23.9 / 16.9; // [m]
 
+//Ball
 var xBall, yBall; // golf ball
 var dBall = 0.1; // ball diameter in [m]
 var ballColor = "#aaaa00"; //ball color
-var v0 = 3.8; // start speed [m/s]
-var v1 = 0;
-var v1x, v1y;
-var v; // current speed
+var v = 3;
+var v0; // start speed [m/s]
+var v0x, v0y;
 var START = false;
 
 var newBtnXPos, newBtnYPos;
 var resetBtnXPos, resetBtnYPos;
 
 const fps = 60;
-var t, t2;
+var t;
 var dt;
 
 const g = 9.81;
@@ -36,6 +36,12 @@ let vec1, vec2;
 
 var sx, sx1, sx2;
 var sy, sy2;
+
+var speedUp;
+
+//RollingFriction
+var CrGrass = 0.2;
+var CrSand = 0.3;
 
 function setup() { /* prepare program */
     frameRate(fps);

@@ -89,7 +89,8 @@ function resetBallState() {
     yBall = dBall / 2;
     START = false;
     t = 0;
-    t2 = 0;
+    v0 = v;
+    speedUp = false;
 }
 
 function getDirection(current, last) {
@@ -106,11 +107,18 @@ function shotBall() {
     if (START) {
         var dir = getDirection(xBall, sx);
         sx = xBall; //last position
-        v1x = v1 * cos(rad);
-        v1y = v1 * sin(rad);
+        v0x = v0 * cos(rad);
+        v0y = v0 * sin(rad);
 
         //1st plane
         if (xBall > pgPoints[2][0] && xBall <= pgPoints[1][0]) {
+            speedUp = false; //speed is reducing in inclined plane
+            applyRollingFriction(CrGrass, 0);
+            //v = 0 ->STOP
+            if (v0 >= 0) {
+                v0 = v0 - g_ * dt;
+            }
+
             //movement from the right to the left
             if (dir == 1) {
                 xBall = sx - dt * v0;
@@ -123,21 +131,45 @@ function shotBall() {
         }
         //1st slope 
         else if (xBall <= pgPoints[2][0] && xBall > pgPoints[3][0]) {
-            t = t + dt;
-            v = g_ * t / 2 - v0; //current speed
-            v1 = Math.abs(v); //get the speed after leaving the 1st slope
-            xBall = sx1 + t * v;
+            applyRollingFriction(CrGrass, rad);
+
+            //v<=0 -> change direction + speed increasing
+            if (v0 >= 0 && !speedUp) {
+                v0 = v0 - g_ * dt;
+            } else {
+                speedUp = true;
+                v0 = v0 + g_ * dt;
+            }
+
+            //movement from the right to the left
+            if (dir == 1) {
+                xBall = sx - dt * v0;
+            }
+            //movement from the left to the right
+            else if (dir == -1) {
+                xBall = sx + dt * v0;
+            }
             yBall = sy - (xBall - sx1) * tan(rad);
         }
         //after 1st slope
         else if (xBall <= pgPoints[3][0]) {
-            t2 = t2 + dt;
-            xBall = sx2 - v1x * t2;
-            yBall = sy2 - g * sq(t2) / 2 + v1y * t2;
+            t = t + dt;
+            xBall = sx2 - v0x * t;
+            yBall = sy2 - g * sq(t) / 2 + v0y * t;
         }
         //ball reach the end of the right side
         if (xBall > pgPoints[1][0]) {
             START = false;
         }
+
+        console.log("Current Speed: " + v0);
+    }
+}
+
+function applyRollingFriction(Cr, rad) {
+    if (!speedUp) {
+        g_ = g * sin(rad) + Cr * g * cos(rad);
+    } else {
+        g_ = g * sin(rad) - Cr * g * cos(rad);
     }
 }
