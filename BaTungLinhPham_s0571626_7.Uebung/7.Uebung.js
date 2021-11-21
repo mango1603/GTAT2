@@ -17,13 +17,18 @@ var playgroundWidth = basicLength * 23.9 / 16.9; // [m]
 var xBall, yBall; // golf ball
 var dBall = 0.1; // ball diameter in [m]
 var ballColor = "#aaaa00"; //ball color
-var v = 6.6;
+const vWater = 5.3; //start speed of the ball to go into water
+const vHole = 6.5; //start speed of the ball to go into the hole
+var v = vHole;
 var v0; // start speed [m/s]
 var v0x, v0y;
 var START = false;
 
 var newBtnXPos, newBtnYPos;
 var resetBtnXPos, resetBtnYPos;
+
+var totalAttemptsXPos, totalAttemptsYPos;
+var totalHolesXPos, totalHolesYPos;
 
 const fps = 60;
 var t;
@@ -43,8 +48,8 @@ var speedUp;
 var CrGrass = 0.2;
 var CrSand = 0.3;
 
-const vWater = 5.3;
-const vHole = 6.6;
+var totalAttemptsTxt, totalHolesTxt;
+var totalAttempts, totalHoles;
 
 function setup() { /* prepare program */
     frameRate(fps);
@@ -60,6 +65,12 @@ function setup() { /* prepare program */
 
     resetBtnXPos = 10 * gridX;
     resetBtnYPos = 90 * gridY;
+
+    totalAttemptsXPos = 10 * gridX;
+    totalAttemptsYPos = 10 * gridY;
+
+    totalHolesXPos = 10 * gridX;
+    totalHolesYPos = 15 * gridY;
 
     dt = 1 / fps;
 
@@ -91,6 +102,23 @@ function draw() {
     rect(resetBtnXPos, resetBtnYPos, buttonWidth, buttonHeight);
     fill(0);
     text("RESET", resetBtnXPos + 0.5 * buttonWidth, resetBtnYPos + 0.5 * buttonHeight);
+    pop();
+
+    //Statistic
+    //Total Attempts
+    totalAttemptsTxt = "Total attempts: " + totalAttempts;
+    totalHolesTxt = "Total holes:      " + totalHoles;
+    push();
+    fill('#00ff00');
+    textAlign(START, CENTER);
+    textSize(2.0 * fontSize);
+    fill(0);
+    text(totalAttemptsTxt, totalAttemptsXPos, totalAttemptsYPos);
+
+    //Total Holes
+    fill('#ff0000');
+    fill(0);
+    text(totalHolesTxt, totalHolesXPos, totalHolesYPos);
     pop();
 
     /* calculation */
@@ -126,12 +154,15 @@ function windowResized() { /* responsive design */
 }
 
 function mouseClicked() {
+    //NewBtn
     if (mouseX > newBtnXPos &&
         mouseX < newBtnXPos + buttonWidth &&
         mouseY > newBtnYPos &&
         mouseY < newBtnYPos + buttonHeight) {
         START = true;
+        totalAttempts++;
     }
+    //ResetBtn
     if (mouseX > resetBtnXPos &&
         mouseX < resetBtnXPos + buttonWidth &&
         mouseY > resetBtnYPos &&

@@ -91,6 +91,8 @@ function resetBallState() {
     t = 0;
     v0 = v;
     speedUp = false;
+    totalAttempts = 0;
+    totalHoles = 0;
 }
 
 function getDirection(current, last) {
@@ -154,9 +156,34 @@ function shotBall() {
         //after 1st slope
         else if (xBall <= pgPoints[3][0]) {
             t = t + dt;
-            xBall = sx2 - v0x * t;
-            yBall = sy2 - g * sq(t) / 2 + v0y * t;
+            //if the ball fall into the water hole
+            if (yBall < pgPoints[5][1] && xBall <= pgPoints[5][0] && xBall > pgPoints[8][0]) {
+                if (yBall > pgPoints[6][1] + dBall / 2) {
+                    if (xBall <= pgPoints[8][0]) {
+                        xBall = sx;
+                    } else {
+                        xBall = sx2 - v0x * t;
+                    }
+                    yBall = pgPoints[6][1] + dBall / 2;
+                }
+            }
+            //if the ball fall into the hole
+            else if (yBall < pgPoints[9][1] && xBall <= pgPoints[9][0] && xBall > pgPoints[12][0]) {
+                if (yBall > pgPoints[10][1] + dBall / 2) {
+                    if (xBall <= pgPoints[12][0]) {
+                        xBall = sx;
+                    } else {
+                        xBall = sx2 - v0x * t;
+                    }
+                    yBall = pgPoints[10][1] + dBall / 2;
+                }
+                totalHoles++;
+            } else {
+                xBall = sx2 - v0x * t;
+                yBall = sy2 - g * sq(t) / 2 + v0y * t;
+            }
         }
+
         //ball reach the end of the right side
         if (xBall > pgPoints[1][0]) {
             START = false;
