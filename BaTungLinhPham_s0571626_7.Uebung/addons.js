@@ -93,6 +93,7 @@ function resetBallState() {
     speedUp = false;
     totalAttempts = 0;
     totalHoles = 0;
+    score = false;
 }
 
 function getDirection(current, last) {
@@ -169,6 +170,10 @@ function shotBall() {
             }
             //if the ball fall into the hole
             else if (yBall < pgPoints[9][1] && xBall <= pgPoints[9][0] && xBall > pgPoints[12][0]) {
+                if (!score) {
+                    totalHoles++;
+                    score = true;
+                }
                 if (yBall > pgPoints[10][1] + dBall / 2) {
                     if (xBall <= pgPoints[12][0]) {
                         xBall = sx;
@@ -177,7 +182,7 @@ function shotBall() {
                     }
                     yBall = pgPoints[10][1] + dBall / 2;
                 }
-                totalHoles++;
+
             } else {
                 xBall = sx2 - v0x * t;
                 yBall = sy2 - g * sq(t) / 2 + v0y * t;

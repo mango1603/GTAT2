@@ -43,6 +43,7 @@ var sx, sx1, sx2;
 var sy, sy2;
 
 var speedUp;
+var score;
 
 //RollingFriction
 var CrGrass = 0.2;
@@ -105,19 +106,14 @@ function draw() {
     pop();
 
     //Statistic
-    //Total Attempts
+
+    //Total attempts + total holes
     totalAttemptsTxt = "Total attempts: " + totalAttempts;
     totalHolesTxt = "Total holes:      " + totalHoles;
     push();
-    fill('#00ff00');
     textAlign(START, CENTER);
-    textSize(2.0 * fontSize);
-    fill(0);
+    textSize(1.5 * fontSize);
     text(totalAttemptsTxt, totalAttemptsXPos, totalAttemptsYPos);
-
-    //Total Holes
-    fill('#ff0000');
-    fill(0);
     text(totalHolesTxt, totalHolesXPos, totalHolesYPos);
     pop();
 
