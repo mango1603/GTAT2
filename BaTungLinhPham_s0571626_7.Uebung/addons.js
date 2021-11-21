@@ -159,13 +159,15 @@ function shotBall() {
             t = t + dt;
             //if the ball fall into the water hole
             if (yBall < pgPoints[5][1] && xBall <= pgPoints[5][0] && xBall > pgPoints[8][0]) {
-                if (yBall > pgPoints[6][1] + dBall / 2) {
-                    if (xBall <= pgPoints[8][0]) {
-                        xBall = sx;
-                    } else {
-                        xBall = sx2 - v0x * t;
-                    }
+                if (xBall <= pgPoints[8][0] || yBall >= pgPoints[6][1] + dBall / 2) {
+                    xBall = sx;
                     yBall = pgPoints[6][1] + dBall / 2;
+                } else {
+                    xBall = sx2 - v0x * t;
+                    if (xBall <= pgPoints[8][0]) {
+                        xBall = pgPoints[7][0] + dBall / 2;
+                    }
+                    yBall = sy2 - g * sq(t) / 2 + v0y * t;
                 }
             }
             //if the ball fall into the hole
@@ -174,15 +176,16 @@ function shotBall() {
                     totalHoles++;
                     score = true;
                 }
-                if (yBall > pgPoints[10][1] + dBall / 2) {
-                    if (xBall <= pgPoints[12][0]) {
-                        xBall = sx;
-                    } else {
-                        xBall = sx2 - v0x * t;
-                    }
+                if (xBall <= pgPoints[12][0] || yBall >= pgPoints[10][1] + dBall / 2) {
+                    xBall = sx;
                     yBall = pgPoints[10][1] + dBall / 2;
+                } else {
+                    xBall = sx2 - v0x * t;
+                    if (xBall <= pgPoints[12][0]) {
+                        xBall = pgPoints[12][0] + dBall / 2;
+                    }
+                    yBall = sy2 - g * sq(t) / 2 + v0y * t;
                 }
-
             } else {
                 xBall = sx2 - v0x * t;
                 yBall = sy2 - g * sq(t) / 2 + v0y * t;
