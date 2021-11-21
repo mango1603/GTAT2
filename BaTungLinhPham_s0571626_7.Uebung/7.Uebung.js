@@ -17,9 +17,14 @@ var playgroundWidth = basicLength * 23.9 / 16.9; // [m]
 var xBall, yBall; // golf ball
 var dBall = 0.1; // ball diameter in [m]
 var ballColor = "#aaaa00"; //ball color
+
+//Speed Controller
+//******************************************************
 const vWater = 5.3; //start speed of the ball to go into water
 const vHole = 6.5; //start speed of the ball to go into the hole
 var v = vHole;
+//******************************************************
+
 var v0; // start speed [m/s]
 var v0x, v0y;
 var START = false;
