@@ -20,9 +20,9 @@ var ballColor = "#aaaa00"; //ball color
 
 //Speed Controller
 //******************************************************
-const vWater = 5.4; //start speed of the ball to go into water
-const vHole = 6.5; //start speed of the ball to go into the hole
-var v = vWater;
+const vWater = 5.3; //start speed of the ball to go into water
+const vHole = 6.6; //start speed of the ball to go into the hole
+var v = vHole;
 //******************************************************
 
 var v0; // start speed [m/s]
