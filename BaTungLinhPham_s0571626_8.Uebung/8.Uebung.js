@@ -1,5 +1,5 @@
 /** GTAT2 Game Technology & Interactive Systems **/
-/** 6. Übung  **/
+/** 8. Übung  **/
 /** Implementation based on 2. Übung-Lösung from Dr.-Ing. V. Naumburger*/
 /************************************************************************************/
 
@@ -42,6 +42,8 @@ var dt;
 
 const g = 9.81;
 var g_;
+var gx_ = 0;
+var gy_ = 0;
 var rad;
 let vec1, vec2;
 
@@ -58,7 +60,6 @@ var CrSand = 0.3;
 //FlowFriction
 var p = 1.3; //[kg/m^3]
 var cw = 0.45; // 
-
 
 var totalAttemptsTxt, totalHolesTxt;
 var totalAttempts, totalHoles;

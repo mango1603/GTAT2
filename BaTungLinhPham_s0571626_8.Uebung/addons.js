@@ -1,5 +1,5 @@
 /** GTAT2 Game Technology & Interactive Systems **/
-/** 6. Übung  **/
+/** 8. Übung  **/
 /** Implementation based on 2. Übung-Lösung from Dr.-Ing. V. Naumburger*/
 /************************************************************************************/
 
@@ -110,16 +110,21 @@ function shotBall() {
     if (START) {
         var dir = getDirection(xBall, sx);
         sx = xBall; //last position
+        v0x = v0 * cos(rad);
+        v0y = v0 * sin(rad);
+
         //1st plane
         if (xBall > pgPoints[2][0] && xBall <= pgPoints[1][0]) {
             speedUp = false; //speed is reducing in inclined plane
+            //calculate speed
             applyRollingFriction(CrGrass, 0);
-            applyFlowFriction(v0);
+            applyFlowFriction(g_, v0);
             //v = 0 ->STOP
             if (v0 >= 0) {
                 v0 = v0 - g_ * dt;
             }
 
+            //calculate position
             //movement from the right to the left
             if (dir == 1) {
                 xBall = sx - dt * v0;
@@ -130,11 +135,13 @@ function shotBall() {
             }
             yBall = dBall / 2;
         }
+
+
         //1st slope 
         else if (xBall <= pgPoints[2][0] && xBall > pgPoints[3][0]) {
+            //calculate speed
             applyRollingFriction(CrGrass, rad);
-            applyFlowFriction(v0);
-
+            applyFlowFriction(g_, v0);
             //v<=0 -> change direction + speed increasing
             if (v0 >= 0 && !speedUp) {
                 v0 = v0 - g_ * dt;
@@ -143,6 +150,7 @@ function shotBall() {
                 v0 = v0 + g_ * dt;
             }
 
+            //calculate position
             //movement from the right to the left
             if (dir == 1) {
                 xBall = sx - dt * v0;
@@ -153,12 +161,19 @@ function shotBall() {
             }
             yBall = sy - (xBall - sx1) * tan(rad);
         }
+
+
         //after 1st slope
         else if (xBall <= pgPoints[3][0]) {
             t = t + dt;
-            applyFlowFriction(v0);
-            v0x = v0 * cos(rad);
-            v0y = v0 * sin(rad);
+            //calculate speed
+            //applyFlowFriction(gx_, v0x);
+            //applyFlowFriction(gy_, v0y);
+            //v0 = v0 - g_ * dt;
+            // v0x = v0x - gx_ * dt;
+            // v0y = v0y - gy_ * dt;
+
+            //special cases
             //if the ball fall into the water hole
             if (yBall < pgPoints[5][1] && xBall <= pgPoints[5][0] && xBall > pgPoints[8][0]) {
                 if (xBall <= pgPoints[8][0] || yBall >= pgPoints[6][1] + dBall / 2) {
@@ -174,10 +189,12 @@ function shotBall() {
             }
             //if the ball fall into the hole
             else if (yBall < pgPoints[9][1] && xBall <= pgPoints[9][0] && xBall > pgPoints[12][0]) {
+                //SCORE
                 if (!score) {
                     totalHoles++;
                     score = true;
                 }
+                //position in hole
                 if (xBall <= pgPoints[12][0] || yBall >= pgPoints[10][1] + dBall / 2) {
                     xBall = sx;
                     yBall = pgPoints[10][1] + dBall / 2;
@@ -188,10 +205,14 @@ function shotBall() {
                     }
                     yBall = sy2 - g * sq(t) / 2 + v0y * t;
                 }
-            } else {
-                xBall = sx2 - v0x * t;
-                yBall = sy2 - g * sq(t) / 2 + v0y * t;
             }
+            //ball flying
+            else {
+                xBall = sx2 - v0x * dt;
+                yBall = sy2 + (v0y - g * t / 2) * dt;
+            }
+            sx2 = xBall;
+            sy2 = yBall;
         }
 
         //ball reach the end of the right side
@@ -199,7 +220,7 @@ function shotBall() {
             START = false;
         }
 
-        console.log("Current Speed: " + v0);
+        //console.log("Current Speed: " + v0);
     }
 }
 
@@ -211,6 +232,6 @@ function applyRollingFriction(Cr, rad) {
     }
 }
 
-function applyFlowFriction(v) {
-    g_ = g_ - cw * p * 2 * Math.PI * dBall * dBall * v * v / 2;
+function applyFlowFriction(g, v) {
+    g = g + ((cw * p * 2 * Math.PI * sq(dBall) * sq(v)) / 2);
 }
