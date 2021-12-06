@@ -90,6 +90,8 @@ function resetBallState() {
     START = false;
     t = 0;
     v0 = v;
+    g_ = g * sin(rad);
+    g0_ = 0;
     speedUp = false;
     totalAttempts = 0;
     totalHoles = 0;
@@ -110,15 +112,13 @@ function shotBall() {
     if (START) {
         var dir = getDirection(xBall, sx);
         sx = xBall; //last position
-        v0x = v0 * cos(rad);
-        v0y = v0 * sin(rad);
+
 
         //1st plane
         if (xBall > pgPoints[2][0] && xBall <= pgPoints[1][0]) {
             speedUp = false; //speed is reducing in inclined plane
             //calculate speed
             applyRollingFriction(CrGrass, 0);
-            applyFlowFriction(g_, v0);
             //v = 0 ->STOP
             if (v0 >= 0) {
                 v0 = v0 - g_ * dt;
@@ -141,7 +141,6 @@ function shotBall() {
         else if (xBall <= pgPoints[2][0] && xBall > pgPoints[3][0]) {
             //calculate speed
             applyRollingFriction(CrGrass, rad);
-            applyFlowFriction(g_, v0);
             //v<=0 -> change direction + speed increasing
             if (v0 >= 0 && !speedUp) {
                 v0 = v0 - g_ * dt;
@@ -167,12 +166,10 @@ function shotBall() {
         else if (xBall <= pgPoints[3][0]) {
             t = t + dt;
             //calculate speed
-            //applyFlowFriction(gx_, v0x);
-            //applyFlowFriction(gy_, v0y);
-            //v0 = v0 - g_ * dt;
-            // v0x = v0x - gx_ * dt;
-            // v0y = v0y - gy_ * dt;
-
+            //apply flow friction 
+            v0 = v0 - dt * cw * p * 2 * Math.PI * sq(dBall) * sq(v0) / 2 / mBall;
+            v0x = v0 * cos(rad);
+            v0y = v0 * sin(rad);
             //special cases
             //if the ball fall into the water hole
             if (yBall < pgPoints[5][1] && xBall <= pgPoints[5][0] && xBall > pgPoints[8][0]) {
@@ -180,17 +177,18 @@ function shotBall() {
                     xBall = sx;
                     yBall = pgPoints[6][1] + dBall / 2;
                 } else {
-                    xBall = sx2 - v0x * t;
+                    xBall = sx2 - v0x * dt;
                     if (xBall <= pgPoints[8][0]) {
                         xBall = pgPoints[7][0] + dBall / 2;
                     }
-                    yBall = sy2 - g * sq(t) / 2 + v0y * t;
+                    yBall = sy2 + v0y * dt - g * (sq(t) - sq(t - dt)) / 2;
                 }
             }
             //if the ball fall into the hole
-            else if (yBall < pgPoints[9][1] && xBall <= pgPoints[9][0] && xBall > pgPoints[12][0]) {
+            else
+            if (yBall < pgPoints[9][1] && xBall <= pgPoints[9][0] && xBall > pgPoints[12][0]) {
                 //SCORE
-                if (!score) {
+                if (!score && yBall > pgPoints[10][1]) {
                     totalHoles++;
                     score = true;
                 }
@@ -199,17 +197,17 @@ function shotBall() {
                     xBall = sx;
                     yBall = pgPoints[10][1] + dBall / 2;
                 } else {
-                    xBall = sx2 - v0x * t;
+                    xBall = sx2 - v0x * dt;
                     if (xBall <= pgPoints[12][0]) {
                         xBall = pgPoints[12][0] + dBall / 2;
                     }
-                    yBall = sy2 - g * sq(t) / 2 + v0y * t;
+                    yBall = sy2 + v0y * dt - g * (sq(t) - sq(t - dt)) / 2;
                 }
             }
             //ball flying
             else {
                 xBall = sx2 - v0x * dt;
-                yBall = sy2 + (v0y - g * t / 2) * dt;
+                yBall = sy2 + v0y * dt - g * (sq(t) - sq(t - dt)) / 2;
             }
             sx2 = xBall;
             sy2 = yBall;
@@ -220,7 +218,9 @@ function shotBall() {
             START = false;
         }
 
-        //console.log("Current Speed: " + v0);
+        if (yBall > pgPoints[0][1]) {
+            console.log("Current Speed: " + v0);
+        }
     }
 }
 
@@ -230,8 +230,4 @@ function applyRollingFriction(Cr, rad) {
     } else {
         g_ = g * sin(rad) - Cr * g * cos(rad);
     }
-}
-
-function applyFlowFriction(g, v) {
-    g = g + ((cw * p * 2 * Math.PI * sq(dBall) * sq(v)) / 2);
 }

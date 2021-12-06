@@ -42,8 +42,7 @@ var dt;
 
 const g = 9.81;
 var g_;
-var gx_ = 0;
-var gy_ = 0;
+var g0_ = 0;
 var rad;
 let vec1, vec2;
 
@@ -91,7 +90,6 @@ function setup() { /* prepare program */
     vec1 = createVector(pgPoints[1][0] - pgPoints[2][0], pgPoints[1][1] - pgPoints[2][1]);
     vec2 = createVector(pgPoints[2][0] - pgPoints[3][0], pgPoints[2][1] - pgPoints[3][1]);
     rad = vec2.angleBetween(vec1);
-    g_ = g * sin(rad);
 
     resetBallState();
 }
