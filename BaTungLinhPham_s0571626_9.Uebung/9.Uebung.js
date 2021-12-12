@@ -15,9 +15,9 @@ var playgroundWidth = basicLength * 23.9 / 16.9; // [m]
 
 //Ball
 var xBall, yBall; // golf ball
-var dBall = 0.019; // ball diameter in [m]
+var dBall = 0.1114; // ball diameter in [m]
 var ballColor = "#aaaa00"; //ball color
-var mBall = 0.0025; //[kg]
+var mBall = 0.045; //[kg]
 
 //Speed Controller
 //******************************************************
@@ -35,6 +35,7 @@ var resetBtnXPos, resetBtnYPos;
 
 var totalAttemptsXPos, totalAttemptsYPos;
 var totalHolesXPos, totalHolesYPos;
+var windSpeedXPos, windSpeedYPos;
 
 const fps = 60;
 var t;
@@ -63,7 +64,7 @@ var cw = 0.45; //
 //Wind Speed
 var vWind;
 
-var totalAttemptsTxt, totalHolesTxt;
+var totalAttemptsTxt, totalHolesTxt, windSpeedTxt;
 var totalAttempts, totalHoles;
 
 function setup() { /* prepare program */
@@ -86,6 +87,9 @@ function setup() { /* prepare program */
 
     totalHolesXPos = 10 * gridX;
     totalHolesYPos = 15 * gridY;
+
+    windSpeedXPos = 10 * gridX;
+    windSpeedYPos = 20 * gridY;
 
     dt = 1 / fps;
 
@@ -123,11 +127,13 @@ function draw() {
     //Total attempts + total holes
     totalAttemptsTxt = "Total attempts: " + totalAttempts;
     totalHolesTxt = "Total holes:      " + totalHoles;
+    windSpeedTxt = "Wind speed:      " + vWind + " m/s";
     push();
     textAlign(START, CENTER);
     textSize(1.5 * fontSize);
     text(totalAttemptsTxt, totalAttemptsXPos, totalAttemptsYPos);
     text(totalHolesTxt, totalHolesXPos, totalHolesYPos);
+    text(windSpeedTxt, windSpeedXPos, windSpeedYPos);
     pop();
 
     /* calculation */
@@ -139,6 +145,9 @@ function draw() {
     translate(x0, y0);
     scale(1, -1);
     playGround();
+
+    //Flag
+
 
     //Golf ball
     fill(ballColor);

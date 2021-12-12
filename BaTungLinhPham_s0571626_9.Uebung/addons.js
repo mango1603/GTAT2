@@ -96,7 +96,7 @@ function resetBallState() {
     totalAttempts = 0;
     totalHoles = 0;
     score = false;
-    generateRandomWindSpeed(150 / 36); // 15km/h = 150/36 m/s
+    vWind = generateRandomWindSpeed(150 / 36); // 15km/h = 150/36 m/s
 }
 
 function getDirection(current, last) {
@@ -234,5 +234,5 @@ function applyRollingFriction(Cr, rad) {
 }
 
 function generateRandomWindSpeed(threshold) {
-    return Math.random() * threshold
+    return (Math.random() * threshold * 2 - threshold).toFixed(2);
 }
