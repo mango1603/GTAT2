@@ -78,13 +78,6 @@ function playGround() {
     pop();
     pop();
 
-    var fragPoints = [
-        [-5.3, 1.25], //0
-        [-5.3, 1.05], //1
-        [-5.3 - 0.6 * (vWind / vWindMax), 1.15], //2
-        [-5.3, 1.25] //3
-    ]
-
     //Frag Stick
     push();
     stroke(0, 0, 0);
@@ -251,10 +244,6 @@ function shotBall() {
         //ball reach the end of the right side
         if (xBall > pgPoints[1][0]) {
             START = false;
-        }
-
-        if (yBall > pgPoints[0][1]) {
-            console.log("Current Speed: " + v0);
         }
     }
 }
