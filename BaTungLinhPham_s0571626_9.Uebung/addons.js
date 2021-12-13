@@ -77,6 +77,36 @@ function playGround() {
     endShape();
     pop();
     pop();
+
+    var fragPoints = [
+        [-5.3, 1.25], //0
+        [-5.3, 1.05], //1
+        [-5.3 - 0.6 * (vWind / vWindMax), 1.15], //2
+        [-5.3, 1.25] //3
+    ]
+
+    //Frag Stick
+    push();
+    stroke(0, 0, 0);
+    strokeWeight(5);
+    beginShape();
+    vertex(-5.3 * M, 0);
+    vertex(-5.3 * M, 1.3 * M);
+    endShape();
+    pop();
+
+    //Frag
+    push();
+    strokeWeight(2);
+    stroke(0, 0, 250);
+    fill(250, 250, 0);
+    beginShape();
+    vertex(-5.3 * M, 1.25 * M);
+    vertex(-5.3 * M, 1.05 * M);
+    vertex((-5.3 - 0.6 * (vWind / vWindMax)) * M, 1.15 * M);
+    vertex(-5.3 * M, 1.25 * M);
+    endShape();
+    pop();
 }
 
 function resetBallState() {
@@ -96,7 +126,7 @@ function resetBallState() {
     totalAttempts = 0;
     totalHoles = 0;
     score = false;
-    vWind = generateRandomWindSpeed(150 / 36); // 15km/h = 150/36 m/s
+    vWind = generateRandomWindSpeed(vWindMax);
 }
 
 function getDirection(current, last) {
@@ -168,9 +198,14 @@ function shotBall() {
             t = t + dt;
             //calculate speed
             //apply flow friction 
-            v0 = v0 - dt * cw * p * 2 * Math.PI * sq(dBall) * sq(v0) / 2 / mBall;
             v0x = v0 * cos(rad);
             v0y = v0 * sin(rad);
+            v0 = sqrt(sq(v0x - vWind) + sq(v0y));
+
+            v0x = v0x - dt * cw * p * 2 * Math.PI * sq(dBall) * (v0x - vWind) * v0 / 2 / mBall;
+            v0y = v0y - dt * cw * p * 2 * Math.PI * sq(dBall) * v0y * v0 / 2 / mBall;
+
+            v0 = sqrt(sq(v0x) + sq(v0y));
             //special cases
             //if the ball fall into the water hole
             if (yBall < pgPoints[5][1] && xBall <= pgPoints[5][0] && xBall > pgPoints[8][0]) {
@@ -186,8 +221,7 @@ function shotBall() {
                 }
             }
             //if the ball fall into the hole
-            else
-            if (yBall < pgPoints[9][1] && xBall <= pgPoints[9][0] && xBall > pgPoints[12][0]) {
+            else if (yBall < pgPoints[9][1] && xBall <= pgPoints[9][0] && xBall > pgPoints[12][0]) {
                 //SCORE
                 if (!score && yBall > pgPoints[10][1]) {
                     totalHoles++;
@@ -234,5 +268,5 @@ function applyRollingFriction(Cr, rad) {
 }
 
 function generateRandomWindSpeed(threshold) {
-    return (Math.random() * threshold * 2 - threshold).toFixed(2);
+    return (Math.random() * threshold * 2 - threshold);
 }

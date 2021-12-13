@@ -63,6 +63,7 @@ var cw = 0.45; //
 
 //Wind Speed
 var vWind;
+var vWindMax = 150 / 36; //[m / s] - 15km/h = 150/36 m/s
 
 var totalAttemptsTxt, totalHolesTxt, windSpeedTxt;
 var totalAttempts, totalHoles;
@@ -127,7 +128,7 @@ function draw() {
     //Total attempts + total holes
     totalAttemptsTxt = "Total attempts: " + totalAttempts;
     totalHolesTxt = "Total holes:      " + totalHoles;
-    windSpeedTxt = "Wind speed:      " + vWind + " m/s";
+    windSpeedTxt = "Wind speed:      " + vWind.toFixed(2) + " m/s";
     push();
     textAlign(START, CENTER);
     textSize(1.5 * fontSize);
@@ -145,9 +146,6 @@ function draw() {
     translate(x0, y0);
     scale(1, -1);
     playGround();
-
-    //Flag
-
 
     //Golf ball
     fill(ballColor);
