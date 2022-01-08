@@ -1,5 +1,5 @@
 /** GTAT2 Game Technology & Interactive Systems **/
-/** 9. Übung  **/
+/** 10. Übung  **/
 /** Implementation based on 2. Übung-Lösung from Dr.-Ing. V. Naumburger*/
 /************************************************************************************/
 
@@ -258,4 +258,75 @@ function applyRollingFriction(Cr, rad) {
 
 function generateRandomWindSpeed(threshold) {
     return (Math.random() * threshold * 2 - threshold);
+}
+
+function getRacketSpeed() {
+
+}
+
+class GolfStick {
+    constructor(x1, y1, x2, y2, diameter) {
+        this.dragging = false;
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.diameter = diameter;
+        this.offsetX = 0;
+        this.offsetY = 0;
+        this.dragged = false;
+        this.yStick = 0;
+        this.xStick = x1;
+        this.hitTheBall = false;
+        this.initialized = false;
+    }
+
+    drawGolfStick() {
+        if (this.dragging) {
+            this.xStick = (mouseX - x0) + this.offsetX;
+        }
+
+        if (this.xStick < 0 && this.dragged && !this.initialized) {
+            this.hitTheBall = true;
+            this.initialized = true;
+        }
+
+        if (this.dragged) {
+            if (this.xStick > 0 && !this.hitTheBall) {
+                this.yStick = this.yStick - (g + this.springConst * this.springConst * (this.xStick - this.x1)) * (0.1 / fps);
+            } else {
+                this.yStick = this.yStick - (g + 2 * this.yStick * this.attenuation + this.springConst * this.springConst * (this.xStick - this.x1)) * (0.1 / fps);
+            }
+        }
+
+        this.xStick = this.xStick + this.yStick * (0.1 / fps);
+
+        //Draw stick
+        strokeWeight(2);
+        line(this.xStick, this.y1, this.xStick, this.y2);
+        //Draw ball
+        fill(putterColor);
+        strokeWeight(1);
+        ellipse(this.xStick, this.y1, this.diameter);
+    }
+
+    pressGolfStick() {
+        if (
+            mouseX > this.xStick + x0 - dPutter * M / 2 &&
+            mouseX < this.xStick + x0 + dPutter * M / 2 &&
+            mouseY > this.y1 + y0 - 3 * dPutter * M / 2 &&
+            mouseY < this.y1 + y0 - dPutter * M / 2 &&
+            !this.dragged
+        ) {
+            this.dragging = true;
+            this.offsetX = this.xStick - (mouseX - x0);
+        }
+    }
+
+    releaseGolfStick() {
+        if (this.dragging) {
+            this.dragged = true;
+            this.dragging = false;
+        }
+    }
 }

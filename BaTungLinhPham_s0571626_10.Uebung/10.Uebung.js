@@ -1,5 +1,5 @@
 /** GTAT2 Game Technology & Interactive Systems **/
-/** 9. Übung  **/
+/** 10. Übung  **/
 /** Implementation based on 2. Übung-Lösung from Dr.-Ing. V. Naumburger*/
 /************************************************************************************/
 
@@ -67,6 +67,15 @@ var vWindMax = 150 / 36; //[m / s] - 15km/h = 150/36 m/s
 
 var totalAttemptsTxt, totalHolesTxt, windSpeedTxt;
 var totalAttempts, totalHoles;
+
+//Golf Stick
+var m = 1; // [kg]
+var springConst = 40; // [N/m]
+var attenuation = 4; // [s-1]
+let golfStick;
+var lengthPutter = 0.45 * bodyHeight;
+var dPutter = 0.15;
+var putterColor = "#aa0000";
 
 function setup() { /* prepare program */
     frameRate(fps);
@@ -160,6 +169,11 @@ function draw() {
     line(0, 5, 0, -5);
     pop();
 
+    //Golf Stick
+    golfStick = new GolfStick(0.2 * M, dPutter * M / 2, 0, 0.7 * lengthPutter * M, dPutter * M);
+    golfStick.drawGolfStick();
+    // console.log(golfStick.stickS);
+
     pop();
 }
 
@@ -177,6 +191,8 @@ function mouseClicked() {
         mouseY < newBtnYPos + buttonHeight) {
         START = true;
         totalAttempts++;
+        golfStick.dragged = false;
+        golfStick.initialized = false;
     }
     //ResetBtn
     if (mouseX > resetBtnXPos &&
@@ -185,4 +201,12 @@ function mouseClicked() {
         mouseY < resetBtnYPos + buttonHeight) {
         resetBallState();
     }
+}
+
+function mousePressed() {
+    golfStick.pressGolfStick();
+}
+
+function mouseReleased() {
+    golfStick.releaseGolfStick();
 }
