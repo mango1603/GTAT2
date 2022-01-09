@@ -78,6 +78,11 @@ var dPutter = 0.15;
 var putterColor = "#aa0000";
 
 var dragging = false;
+var dragged = false;
+var vStick = 0;
+var sStick = 0;
+var hitTheBall = false;
+var initialized = false;
 
 function setup() { /* prepare program */
     frameRate(fps);
