@@ -77,6 +77,8 @@ var lengthPutter = 0.45 * bodyHeight;
 var dPutter = 0.15;
 var putterColor = "#aa0000";
 
+var dragging = false;
+
 function setup() { /* prepare program */
     frameRate(fps);
     createCanvas(windowWidth, windowHeight);
@@ -170,7 +172,7 @@ function draw() {
     pop();
 
     //Golf Stick
-    golfStick = new GolfStick(0.2 * M, dPutter * M / 2, 0, 0.7 * lengthPutter * M, dPutter * M);
+    golfStick = new GolfStick(0, dPutter * M / 2, 0, 0.7 * lengthPutter * M, dPutter * M);
     golfStick.drawGolfStick();
     // console.log(golfStick.stickS);
 

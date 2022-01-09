@@ -266,7 +266,6 @@ function getRacketSpeed() {
 
 class GolfStick {
     constructor(x1, y1, x2, y2, diameter) {
-        this.dragging = false;
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -282,7 +281,7 @@ class GolfStick {
     }
 
     drawGolfStick() {
-        if (this.dragging) {
+        if (dragging && (mouseX - x0) >= this.x1) {
             this.xStick = (mouseX - x0) + this.offsetX;
         }
 
@@ -293,40 +292,36 @@ class GolfStick {
 
         if (this.dragged) {
             if (this.xStick > 0 && !this.hitTheBall) {
-                this.yStick = this.yStick - (g + this.springConst * this.springConst * (this.xStick - this.x1)) * (0.1 / fps);
+                this.yStick = this.yStick - (g + this.springConst * this.springConst * (this.xStick - this.x1)) * dt;
             } else {
-                this.yStick = this.yStick - (g + 2 * this.yStick * this.attenuation + this.springConst * this.springConst * (this.xStick - this.x1)) * (0.1 / fps);
+                this.yStick = this.yStick - (g + 2 * this.yStick * this.attenuation + this.springConst * this.springConst * (this.xStick - this.x1)) * dt;
             }
         }
 
-        this.xStick = this.xStick + this.yStick * (0.1 / fps);
+        this.xStick = this.xStick + this.yStick * dt;
 
-        //Draw stick
+        //Draw
         strokeWeight(2);
         line(this.xStick, this.y1, this.xStick, this.y2);
-        //Draw ball
         fill(putterColor);
         strokeWeight(1);
         ellipse(this.xStick, this.y1, this.diameter);
     }
 
     pressGolfStick() {
-        if (
-            mouseX > this.xStick + x0 - dPutter * M / 2 &&
+        if (mouseX > this.xStick + x0 - dPutter * M / 2 &&
             mouseX < this.xStick + x0 + dPutter * M / 2 &&
             mouseY > this.y1 + y0 - 3 * dPutter * M / 2 &&
-            mouseY < this.y1 + y0 - dPutter * M / 2 &&
-            !this.dragged
-        ) {
-            this.dragging = true;
+            mouseY < this.y1 + y0 - dPutter * M / 2 && !this.dragged) {
+            dragging = true;
             this.offsetX = this.xStick - (mouseX - x0);
         }
     }
 
     releaseGolfStick() {
-        if (this.dragging) {
+        if (dragging) {
             this.dragged = true;
-            this.dragging = false;
+            dragging = false;
         }
     }
 }
