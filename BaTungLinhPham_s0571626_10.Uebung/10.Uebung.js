@@ -92,7 +92,7 @@ function setup() { /* prepare program */
 
     omega = sqrt(springConst / m);
 
-    M = 0.85 * canvasWidth / playgroundWidth
+    M = 0.85 * canvasWidth / playgroundWidth;
     x0 = 25.0 * canvasWidth / 29.7;
     y0 = 15.3 * canvasHeight / 21.0;
 
@@ -182,7 +182,6 @@ function draw() {
     //Golf Stick
     golfStick = new GolfStick(0, dPutter * M / 2, 0, 0.7 * lengthPutter * M, dPutter * M);
     golfStick.drawGolfStick();
-    // console.log(golfStick.stickS);
 
     pop();
 }

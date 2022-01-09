@@ -105,6 +105,7 @@ function playGround() {
 function resetBallState() {
     newBallState();
     totalAttempts = 0;
+    totalHoles = 0;
 }
 
 function newBallState() {
@@ -127,11 +128,9 @@ function newBallState() {
     g_ = g * sin(rad);
     g0_ = 0;
     speedUp = false;
-    totalHoles = 0;
     score = false;
     vWind = generateRandomWindSpeed(vWindMax);
     totalAttempts++;
-
 }
 
 function getDirection(current, last) {
