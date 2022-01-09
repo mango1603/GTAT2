@@ -103,6 +103,11 @@ function playGround() {
 }
 
 function resetBallState() {
+    newBallState();
+    totalAttempts = 0;
+}
+
+function newBallState() {
     sx = 1;
     sx1 = pgPoints[2][0];
     sx2 = pgPoints[3][0];
@@ -112,14 +117,21 @@ function resetBallState() {
     yBall = dBall / 2;
     START = false;
     t = 0;
-    v0 = v;
+    dragging = false;
+    dragged = false;
+    vStick = 0;
+    sStick = 0;
+    hitTheBall = false;
+    initialized = false;
+    v0 = 0;
     g_ = g * sin(rad);
     g0_ = 0;
     speedUp = false;
-    totalAttempts = 0;
     totalHoles = 0;
     score = false;
     vWind = generateRandomWindSpeed(vWindMax);
+    totalAttempts++;
+
 }
 
 function getDirection(current, last) {
@@ -246,6 +258,7 @@ function shotBall() {
             START = false;
         }
     }
+    //console.log(v0);
 }
 
 function applyRollingFriction(Cr, rad) {
@@ -283,18 +296,17 @@ class GolfStick {
         if (sStick < this.x1 && dragged && !initialized) {
             hitTheBall = true;
             initialized = true;
+            v0 = Math.abs(vStick * 0.01) * 2;
+            START = true;
         }
 
         if (dragged) {
-            if (sStick > this.x1 && !hitTheBall) {
-                vStick = vStick - (g + springConst * springConst * (sStick - this.x1)) * dt;
+            if (sStick >= this.x1 && !hitTheBall) {
+                vStick = vStick - (2 * vStick + sq(omega) * sStick) * dt
             } else {
-                vStick = vStick - (g + 2 * vStick * attenuation + springConst * springConst * (sStick - this.x1)) * dt;
+                vStick = vStick - (2 * attenuation * vStick + sq(omega) * sStick) * dt
             }
         }
-
-        console.log(vStick);
-
         sStick = sStick + vStick * dt;
 
         //Draw

@@ -23,7 +23,7 @@ var mBall = 0.045; //[kg]
 //******************************************************
 const vWater = 5.3; //start speed of the ball to go into water
 const vHole = 6.6; //start speed of the ball to go into the hole
-var v = 5.8;
+var v = 5.8; //[m/s]
 //******************************************************
 
 var v0; // start speed [m/s]
@@ -72,6 +72,7 @@ var totalAttempts, totalHoles;
 var m = 1; // [kg]
 var springConst = 40; // [N/m]
 var attenuation = 4; // [s-1]
+var omega;
 let golfStick;
 var lengthPutter = 0.45 * bodyHeight;
 var dPutter = 0.15;
@@ -88,6 +89,8 @@ function setup() { /* prepare program */
     frameRate(fps);
     createCanvas(windowWidth, windowHeight);
     evaluateConstants();
+
+    omega = sqrt(springConst / m);
 
     M = 0.85 * canvasWidth / playgroundWidth
     x0 = 25.0 * canvasWidth / 29.7;
@@ -196,10 +199,7 @@ function mouseClicked() {
         mouseX < newBtnXPos + buttonWidth &&
         mouseY > newBtnYPos &&
         mouseY < newBtnYPos + buttonHeight) {
-        START = true;
-        totalAttempts++;
-        golfStick.dragged = false;
-        golfStick.initialized = false;
+        newBallState();
     }
     //ResetBtn
     if (mouseX > resetBtnXPos &&
