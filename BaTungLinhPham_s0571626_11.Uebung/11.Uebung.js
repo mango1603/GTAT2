@@ -84,6 +84,9 @@ var sStick = 0;
 var hitTheBall = false;
 var initialized = false;
 
+var vecO, vecS;
+var distance, angle;
+
 function setup() { /* prepare program */
     frameRate(fps);
     createCanvas(windowWidth, windowHeight);
