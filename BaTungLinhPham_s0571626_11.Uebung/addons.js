@@ -324,74 +324,16 @@ function hitTheGround() {
 
     if (xBall <= pgPoints[3][0] && xBall > pgPoints[4][0]) {
         initVector(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], xBall, yBall);
-        distance = vecS.mult(vecO).mag() / vecS.mag();
-        if (distance <= dBall / 2) {
+        d = vecS.cross(vecO).mag() / vecS.mag();
+        lPath = vecS.dot(vecO) / vecS.mag();
+        lSegment = Math.sqrt(Math.pow(pgPoints[3][0] - pgPoints[4][0], 2) + Math.pow(pgPoints[3][1] - pgPoints[4][1]), 2);
+        if (d < dBall / 2) {
             START = false;
         }
+        if (lPath >= 0 && lPath <= lSegment) {
+
+        }
     }
-
-
-    //else if (xBall <= pgPoints[4][0] && xBall > pgPoints[5][0]) {
-
-    //     angle = 0;
-
-    //     initVector(pgPoints[4][0], pgPoints[4][1], pgPoints[5][0], pgPoints[5][1], xBall, yBall);
-
-    // } else if (xBall <= pgPoints[5][0] && xBall > pgPoints[6][0]) {
-
-    //     angle = getAngleBetween(pgPoints[5][0], pgPoints[5][1], pgPoints[6][0], pgPoints[6][1], pgPoints[6][0], pgPoints[6][1], pgPoints[7][0], pgPoints[7][1]);
-
-    //     initVector(pgPoints[5][0], pgPoints[5][1], pgPoints[6][0], pgPoints[6][1], xBall, yBall);
-
-    // } else if (xBall <= pgPoints[6][0] && xBall > pgPoints[7][0]) {
-
-    //     angle = getAngleBetween(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], pgPoints[4][0], pgPoints[4][1], pgPoints[5][0], pgPoints[5][1]);
-
-    //     initVector(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], xBall, yBall);
-
-    // } else if (xBall <= pgPoints[7][0] && xBall > pgPoints[8][0]) {
-
-    //     angle = getAngleBetween(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], pgPoints[4][0], pgPoints[4][1], pgPoints[5][0], pgPoints[5][1]);
-
-    //     initVector(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], xBall, yBall);
-
-    // } else if (xBall <= pgPoints[8][0] && xBall > pgPoints[9][0]) {
-
-    //     angle = getAngleBetween(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], pgPoints[4][0], pgPoints[4][1], pgPoints[5][0], pgPoints[5][1]);
-
-    //     initVector(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], xBall, yBall);
-
-    // } else if (xBall <= pgPoints[9][0] && xBall > pgPoints[10][0]) {
-
-    //     angle = getAngleBetween(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], pgPoints[4][0], pgPoints[4][1], pgPoints[5][0], pgPoints[5][1]);
-
-    //     initVector(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], xBall, yBall);
-
-    // } else if (xBall <= pgPoints[10][0] && xBall > pgPoints[11][0]) {
-
-    //     angle = getAngleBetween(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], pgPoints[4][0], pgPoints[4][1], pgPoints[5][0], pgPoints[5][1]);
-
-    //     initVector(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], xBall, yBall);
-
-    // } else if (xBall <= pgPoints[11][0] && xBall > pgPoints[12][0]) {
-
-    //     angle = getAngleBetween(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], pgPoints[4][0], pgPoints[4][1], pgPoints[5][0], pgPoints[5][1]);
-
-    //     initVector(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], xBall, yBall);
-
-    // } else if (xBall <= pgPoints[12][0] && xBall > pgPoints[13][0]) {
-
-    //     angle = getAngleBetween(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], pgPoints[4][0], pgPoints[4][1], pgPoints[5][0], pgPoints[5][1]);
-
-    //     initVector(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], xBall, yBall);
-
-    // } else if (xBall <= pgPoints[13][0] && xBall > pgPoints[14][0]) {
-
-    //     angle = getAngleBetween(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], pgPoints[4][0], pgPoints[4][1], pgPoints[5][0], pgPoints[5][1]);
-
-    //     initVector(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], xBall, yBall);
-
-    // }
 }
 
 function hit() {
@@ -400,7 +342,6 @@ function hit() {
             initVector(pgPoints[i][0], pgPoints[i][1], pgPoints[i + 1][0], pgPoints[i + 1][1], xBall, yBall);
         }
     }
-
 }
 
 function initVector(pix, piy, pi1x, pi1y, pObjx, pObjy) {

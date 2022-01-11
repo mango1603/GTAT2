@@ -85,7 +85,7 @@ var hitTheBall = false;
 var initialized = false;
 
 var vecO, vecS;
-var distance, angle;
+var distance, d, lPath, lSegment;
 
 function setup() { /* prepare program */
     frameRate(fps);
