@@ -148,7 +148,6 @@ function shotBall() {
         var dir = getDirection(xBall, sx);
         sx = xBall; //last position
 
-
         //1st plane
         if (xBall > pgPoints[2][0] && xBall <= pgPoints[1][0]) {
             speedUp = false; //speed is reducing in inclined plane
@@ -170,8 +169,6 @@ function shotBall() {
             }
             yBall = dBall / 2;
         }
-
-
         //1st slope 
         else if (xBall <= pgPoints[2][0] && xBall > pgPoints[3][0]) {
             //calculate speed
@@ -195,8 +192,6 @@ function shotBall() {
             }
             yBall = sy - (xBall - sx1) * tan(rad);
         }
-
-
         //after 1st slope
         else if (xBall <= pgPoints[3][0]) {
             t = t + dt;
@@ -210,56 +205,25 @@ function shotBall() {
             v0y = v0y - dt * cw * p * 2 * Math.PI * sq(dBall) * v0y * v0 / 2 / mBall;
 
             v0 = sqrt(sq(v0x) + sq(v0y));
-            //special cases
-            //if the ball fall into the water hole
-            if (yBall < pgPoints[5][1] && xBall <= pgPoints[5][0] && xBall > pgPoints[8][0]) {
-                if (xBall <= pgPoints[8][0] || yBall >= pgPoints[6][1] + dBall / 2) {
-                    xBall = sx;
-                    yBall = pgPoints[6][1] + dBall / 2;
-                } else {
-                    xBall = sx2 - v0x * dt;
-                    if (xBall <= pgPoints[8][0]) {
-                        xBall = pgPoints[7][0] + dBall / 2;
-                    }
-                    yBall = sy2 + v0y * dt - g * (sq(t) - sq(t - dt)) / 2;
-                }
-            }
-            //if the ball fall into the hole
-            else if (yBall < pgPoints[9][1] && xBall <= pgPoints[9][0] && xBall > pgPoints[12][0]) {
-                //SCORE
-                if (!score && yBall > pgPoints[10][1]) {
-                    totalHoles++;
-                    score = true;
-                }
-                //position in hole
-                if (xBall <= pgPoints[12][0] || yBall >= pgPoints[10][1] + dBall / 2) {
-                    xBall = sx;
-                    yBall = pgPoints[10][1] + dBall / 2;
-                } else {
-                    xBall = sx2 - v0x * dt;
-                    if (xBall <= pgPoints[12][0]) {
-                        xBall = pgPoints[12][0] + dBall / 2;
-                    }
-                    yBall = sy2 + v0y * dt - g * (sq(t) - sq(t - dt)) / 2;
-                }
-            }
-            //ball flying
-            else {
-                xBall = sx2 - v0x * dt;
-                yBall = sy2 + v0y * dt - g * (sq(t) - sq(t - dt)) / 2;
-            }
+            xBall = sx2 - v0x * dt;
+            yBall = sy2 + v0y * dt - g * (sq(t) - sq(t - dt)) / 2;
             sx2 = xBall;
             sy2 = yBall;
-            hitTheGround();
-
         }
 
         //ball reach the end of the right side
         if (xBall > pgPoints[1][0]) {
             START = false;
         }
+        hitTheGround();
+        checkScore();
     }
-    //console.log(v0);
+}
+
+function checkScore() {
+    if (START == false && xBall <= pgPoints[9][0] && xBall >= pgPoints[12][0]) {
+        totalHoles++;
+    }
 }
 
 function applyRollingFriction(Cr, rad) {
@@ -274,79 +238,27 @@ function generateRandomWindSpeed(threshold) {
     return (Math.random() * threshold * 2 - threshold);
 }
 
-function hitTheGround1() {
-    if (xBall <= pgPoints[3][0] && xBall > pgPoints[4][0]) {
-        var m = pgPoints[3][0] - pgPoints[4][0];
-        var n = pgPoints[3][1] - pgPoints[4][1];
-        var mx = pgPoints[3][0] - xBall;
-        var angle = getAngleBetween(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], pgPoints[4][0], pgPoints[4][1], pgPoints[5][0], pgPoints[5][1]);
-        var acceptableY = n - ((n * (mx - (dBall / 2) / Math.sin(angle))) / m);
-        if (yBall <= acceptableY) {
-            START = false;
-        }
-    } else if (xBall <= pgPoints[4][0] && xBall > pgPoints[5][0]) {
-        if (yBall <= dBall / 2) {
-            START = false;
-        }
-    } else if (xBall <= pgPoints[5][0] && xBall > pgPoints[6][0]) {
-
-    } else if (xBall <= pgPoints[6][0] && xBall > pgPoints[7][0]) {
-
-    } else if (xBall <= pgPoints[7][0] && xBall > pgPoints[8][0]) {
-
-    } else if (xBall <= pgPoints[8][0] && xBall > pgPoints[9][0]) {
-        if (yBall <= dBall / 2) {
-            START = false;
-        }
-    } else if (xBall <= pgPoints[9][0] && xBall > pgPoints[10][0]) {
-
-    } else if (xBall <= pgPoints[10][0] && xBall > pgPoints[11][0]) {
-
-    } else if (xBall <= pgPoints[11][0] && xBall > pgPoints[12][0]) {
-
-    } else if (xBall <= pgPoints[12][0] && xBall > pgPoints[13][0]) {
-        if (yBall <= dBall / 2) {
-            START = false;
-        }
-    } else if (xBall <= pgPoints[13][0] && xBall > pgPoints[14][0]) {
-        var m = pgPoints[13][0] - pgPoints[14][0];
-        var n = pgPoints[14][1] - pgPoints[13][1];
-        var mx = xBall - pgPoints[14][0];
-        var angle = getAngleBetween(pgPoints[13][0], pgPoints[13][1], pgPoints[14][0], pgPoints[14][1], pgPoints[13][0], pgPoints[13][1], pgPoints[12][0], pgPoints[12][1]);
-        var acceptableY = n - ((n * (mx - (dBall / 2) / Math.sin(angle))) / m);
-        if (yBall <= acceptableY) {
-            START = false;
-        }
-    }
-}
-
 function hitTheGround() {
-
-    if (xBall <= pgPoints[3][0] && xBall > pgPoints[4][0]) {
-        initVector(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], xBall, yBall);
+    for (let i = 3; i < pgPoints.length - 1; i++) {
+        initVector(pgPoints[i][0], pgPoints[i][1], pgPoints[i + 1][0], pgPoints[i + 1][1], xBall, yBall);
         d = vecS.cross(vecO).mag() / vecS.mag();
         lPath = vecS.dot(vecO) / vecS.mag();
-        lSegment = Math.sqrt(Math.pow(pgPoints[3][0] - pgPoints[4][0], 2) + Math.pow(pgPoints[3][1] - pgPoints[4][1]), 2);
-        if (d < dBall / 2) {
-            START = false;
-        }
+        lSegment = Math.sqrt(Math.pow(pgPoints[i][0] - pgPoints[i + 1][0], 2) + Math.pow(pgPoints[i][1] - pgPoints[i + 1][1], 2));
         if (lPath >= 0 && lPath <= lSegment) {
-
-        }
-    }
-}
-
-function hit() {
-    for (var i = 3; i < 14; i++) {
-        if (xBall <= pgPoints[i][0] && xBall > pgPoints[i + 1][0]) {
-            initVector(pgPoints[i][0], pgPoints[i][1], pgPoints[i + 1][0], pgPoints[i + 1][1], xBall, yBall);
+            vecP = vecS.div(Math.sqrt(Math.pow(pgPoints[i][0], 2) + Math.pow(pgPoints[i][1], 2))).mult(lPath);
+            if (d <= dBall / 2) {
+                normalAngle = Math.atan(yBall - pgPoints[i][1], yBall - pgPoints[i][0]);
+                START = false;
+                console.log("Distance: " + (d * M));
+                console.log("Normal Angle: " + normalAngle);
+            }
         }
     }
 }
 
 function initVector(pix, piy, pi1x, pi1y, pObjx, pObjy) {
     vecO = createVector(pObjx - pix, pObjy - piy);
-    vecS = createVector(pi1x - pix, pi1y - pi1y);
+    vecS = createVector(pi1x - pix, pi1y - piy);
 }
 
 function getAngleBetween(x1, y1, x2, y2, x3, y3, x4, y4) {

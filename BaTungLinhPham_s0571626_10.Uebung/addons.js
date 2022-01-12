@@ -257,7 +257,6 @@ function shotBall() {
             START = false;
         }
     }
-    //console.log(v0);
 }
 
 function applyRollingFriction(Cr, rad) {

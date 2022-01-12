@@ -84,8 +84,8 @@ var sStick = 0;
 var hitTheBall = false;
 var initialized = false;
 
-var vecO, vecS;
-var distance, d, lPath, lSegment;
+var vecO, vecS, vecP;
+var distance, d, lPath, lSegment, normalAngle;
 
 function setup() { /* prepare program */
     frameRate(fps);
