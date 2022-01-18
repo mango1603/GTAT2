@@ -126,7 +126,6 @@ function newBallState() {
     hitTheBall = false;
     initialized = false;
     v0 = 0;
-    g_ = g * sin(radA);
     g0_ = 0;
     speedUp = false;
     score = false;
@@ -153,7 +152,7 @@ function shotBall() {
             flyMode();
             hitTheGround();
         } else {
-            getBallSpeedAfterCollision();
+
             rollingMode();
         }
         checkScore();
@@ -215,7 +214,6 @@ function flyMode() {
         //apply flow friction 
         v0x = v0 * cos(radA);
         v0y = v0 * sin(radA);
-        v0 = sqrt(sq(v0x - vWind) + sq(v0y));
 
         v0x = v0x - (dt * cw * p * 2 * Math.PI * sq(dBall) * (v0x - vWind) * sqrt(sq(v0x - vWind) + sq(v0y))) / 2 / mBall;
         v0y = v0y - (dt * cw * p * 2 * Math.PI * sq(dBall) * v0y * sqrt(sq(v0x - vWind) + sq(v0y))) / 2 / mBall;
@@ -238,21 +236,14 @@ function rollingMode() {
 
     //1st plane
     if (xBall > pgPoints[2][0] && xBall <= pgPoints[1][0]) {
-        speedUp = false; //speed is reducing in inclined plane
-        //calculate speed
+        speedUp = false;
         applyRollingFriction(CrGrass, 0);
-        //v = 0 ->STOP
         if (v0 >= 0) {
             v0 = v0 - g_ * dt;
         }
-
-        //calculate position
-        //movement from the right to the left
         if (dir == 1) {
             xBall = sx - dt * v0;
-        }
-        //movement from the left to the right
-        else if (dir == -1) {
+        } else if (dir == -1) {
             xBall = sx + dt * v0;
         }
         yBall = dBall / 2;
@@ -260,23 +251,16 @@ function rollingMode() {
 
     //1st slope 
     else if (xBall <= pgPoints[2][0] && xBall > pgPoints[3][0]) {
-        //calculate speed
         applyRollingFriction(CrGrass, radA);
-        //v<=0 -> change direction + speed increasing
         if (v0 >= 0 && !speedUp) {
             v0 = v0 - g_ * dt;
         } else {
             speedUp = true;
             v0 = v0 + g_ * dt;
         }
-
-        //calculate position
-        //movement from the right to the left
         if (dir == 1) {
             xBall = sx - dt * v0;
-        }
-        //movement from the left to the right
-        else if (dir == -1) {
+        } else if (dir == -1) {
             xBall = sx + dt * v0;
         }
         yBall = sy - (xBall - sx1) * tan(radA);
@@ -354,13 +338,6 @@ function rollingMode() {
     }
 }
 
-function getBallSpeedAfterCollision() {
-    directionAngle = Math.atan(v0y / v0x);
-    vz = v0 * Math.cos(normalAngle - directionAngle);
-    vt = v0 * Math.sin(normalAngle - directionAngle);
-    v0 = sqrt(sq(vz) + sq(vt));
-}
-
 function checkScore() {
     if (START == false && xBall <= pgPoints[9][0] && xBall >= pgPoints[12][0]) {
         totalHoles++;
@@ -388,12 +365,32 @@ function hitTheGround() {
         if (lPath >= 0 && lPath <= lSegment) {
             vecP = vecS.div(Math.sqrt(Math.pow(pgPoints[i][0], 2) + Math.pow(pgPoints[i][1], 2))).mult(lPath);
             if (d <= dBall) {
-                normalAngle = Math.atan(yBall - pgPoints[i][1], yBall - pgPoints[i][0]);
                 rolling = true;
+                normalAngle = Math.atan(yBall - pgPoints[i][1], yBall - pgPoints[i][0]);
+                getBallSpeedAfterCollision();
                 console.log("Distance: " + (d * M));
                 console.log("Normal Angle: " + toDegree(normalAngle));
             }
         }
+    }
+}
+
+function getBallSpeedAfterCollision() {
+    directionAngle = Math.atan(v0y / v0x);
+
+    //plane
+    if ((xBall > pgPoints[2][0] && xBall <= pgPoints[1][0]) ||
+        (xBall <= pgPoints[4][0] && xBall > pgPoints[5][0]) ||
+        (xBall <= pgPoints[8][0] && xBall > pgPoints[9][0]) ||
+        (xBall <= pgPoints[12][0] && xBall > pgPoints[13][0])) {
+        v0 = v0 * Math.sin(directionAngle);
+    }
+
+    //slope 
+    else if ((xBall <= pgPoints[2][0] && xBall > pgPoints[3][0]) ||
+        (xBall <= pgPoints[3][0] && xBall > pgPoints[4][0]) ||
+        (xBall <= pgPoints[13][0] && xBall > pgPoints[14][0])) {
+        v0 = v0 * Math.sin(normalAngle - directionAngle);
     }
 }
 

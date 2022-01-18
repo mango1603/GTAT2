@@ -62,7 +62,7 @@ var cw = 0.45; //
 
 //Wind Speed
 var vWind;
-var vWindMax = 125 / 9; //[m / s] - 50km/h = 125/9 m/s 
+var vWindMax = 1; //125 / 9; //[m / s] - 50km/h = 125/9 m/s 
 
 var totalAttemptsTxt, totalHolesTxt, windSpeedTxt;
 var totalAttempts, totalHoles;
