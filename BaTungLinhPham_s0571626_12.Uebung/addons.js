@@ -150,9 +150,7 @@ function shotBall() {
     if (START) {
         if (!rolling) {
             flyMode();
-            hitTheGround();
         } else {
-
             rollingMode();
         }
         checkScore();
@@ -223,6 +221,7 @@ function flyMode() {
         yBall = sy2 + v0y * dt - g * (sq(t) - sq(t - dt)) / 2;
         sx2 = xBall;
         sy2 = yBall;
+        hitTheGround();
     }
     //ball reach the end of the right side
     if (xBall > pgPoints[1][0]) {
