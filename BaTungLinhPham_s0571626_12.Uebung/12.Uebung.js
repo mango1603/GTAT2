@@ -15,9 +15,9 @@ var playgroundWidth = basicLength * 23.9 / 16.9; // [m]
 
 //Ball
 var xBall, yBall; // golf ball
-var dBall = 0.1114; // ball diameter in [m]
+var dBall = 0.1; // ball diameter in [m]
 var ballColor = "#aaaa00"; //ball color
-var mBall = 0.045; //[kg]
+var mBall = 0.0459; //[kg]
 
 //Speed Controller
 //******************************************************
@@ -54,7 +54,7 @@ var score;
 
 //RollingFriction
 var CrGrass = 0.2;
-var CrSand = 0.3;
+var CrSand = 0.5;
 
 //FlowFriction
 var p = 1.3; //[kg/m^3]
@@ -62,7 +62,7 @@ var cw = 0.45; //
 
 //Wind Speed
 var vWind;
-var vWindMax = 150 / 36; //[m / s] - 15km/h = 150/36 m/s
+var vWindMax = 125 / 9; //[m / s] - 50km/h = 125/9 m/s 
 
 var totalAttemptsTxt, totalHolesTxt, windSpeedTxt;
 var totalAttempts, totalHoles;
@@ -85,10 +85,12 @@ var hitTheBall = false;
 var initialized = false;
 
 var vecO, vecS, vecP;
-var distance, d, lPath, lSegment, normalAngle;
+var d, lPath, lSegment, normalAngle;
+
+var ballRolling = false;
 
 function setup() { /* prepare program */
-    frameRate(fps);
+    frameRate(60);
     createCanvas(windowWidth, windowHeight);
     evaluateConstants();
 
@@ -166,9 +168,18 @@ function draw() {
     playGround();
 
     //Golf ball
+    // if (ballRolling) {
+    //     push();
+    //     rotate(normalAngle);
+    //     fill(ballColor);
+    //     shotBall();
+    //     ellipse(xBall * M, yBall * M, dBall * M);
+    //     pop();
+    // } else {
     fill(ballColor);
     shotBall();
     ellipse(xBall * M, yBall * M, dBall * M);
+    // }
 
     //Zero-point marker
     push();

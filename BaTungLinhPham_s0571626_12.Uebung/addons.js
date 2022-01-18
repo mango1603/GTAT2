@@ -131,6 +131,8 @@ function newBallState() {
     score = false;
     vWind = generateRandomWindSpeed(vWindMax);
     totalAttempts++;
+    normalAngle = 0;
+    ballRolling = false;
 }
 
 function getDirection(current, last) {
@@ -201,8 +203,8 @@ function shotBall() {
             v0y = v0 * sin(rad);
             v0 = sqrt(sq(v0x - vWind) + sq(v0y));
 
-            v0x = v0x - dt * cw * p * 2 * Math.PI * sq(dBall) * (v0x - vWind) * v0 / 2 / mBall;
-            v0y = v0y - dt * cw * p * 2 * Math.PI * sq(dBall) * v0y * v0 / 2 / mBall;
+            v0x = v0x - (dt * cw * p * 2 * Math.PI * sq(dBall) * (v0x - vWind) * sqrt(sq(v0x - vWind) + sq(v0y))) / 2 / mBall;
+            v0y = v0y - (dt * cw * p * 2 * Math.PI * sq(dBall) * v0y * sqrt(sq(v0x - vWind) + sq(v0y))) / 2 / mBall;
 
             v0 = sqrt(sq(v0x) + sq(v0y));
             xBall = sx2 - v0x * dt;
@@ -248,9 +250,10 @@ function hitTheGround() {
             vecP = vecS.div(Math.sqrt(Math.pow(pgPoints[i][0], 2) + Math.pow(pgPoints[i][1], 2))).mult(lPath);
             if (d <= dBall / 2) {
                 normalAngle = Math.atan(yBall - pgPoints[i][1], yBall - pgPoints[i][0]);
+                ballRolling = true;
                 START = false;
                 console.log("Distance: " + (d * M));
-                console.log("Normal Angle: " + normalAngle);
+                console.log("Normal Angle: " + toDegree(normalAngle));
             }
         }
     }
@@ -270,6 +273,10 @@ function getAngleBetween(x1, y1, x2, y2, x3, y3, x4, y4) {
     } else {
         return Math.PI - angle;
     }
+}
+
+function toDegree(radians) {
+    return radians * (180 / Math.PI);
 }
 
 class GolfStick {
