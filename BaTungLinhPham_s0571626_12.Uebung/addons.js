@@ -112,6 +112,7 @@ function newBallState() {
     sx = 1;
     sx1 = pgPoints[2][0];
     sx2 = pgPoints[3][0];
+    sx3 = pgPoints[13][0];
     sy = dBall / 2;
     sy2 = pgPoints[3][1] + sy;
     xBall = 0;
@@ -125,14 +126,15 @@ function newBallState() {
     hitTheBall = false;
     initialized = false;
     v0 = 0;
-    g_ = g * sin(rad);
+    g_ = g * sin(radA);
     g0_ = 0;
     speedUp = false;
     score = false;
     vWind = generateRandomWindSpeed(vWindMax);
     totalAttempts++;
     normalAngle = 0;
-    ballRolling = false;
+    directionAngle = 0;
+    rolling = false;
 }
 
 function getDirection(current, last) {
@@ -147,79 +149,216 @@ function getDirection(current, last) {
 
 function shotBall() {
     if (START) {
-        var dir = getDirection(xBall, sx);
-        sx = xBall; //last position
-
-        //1st plane
-        if (xBall > pgPoints[2][0] && xBall <= pgPoints[1][0]) {
-            speedUp = false; //speed is reducing in inclined plane
-            //calculate speed
-            applyRollingFriction(CrGrass, 0);
-            //v = 0 ->STOP
-            if (v0 >= 0) {
-                v0 = v0 - g_ * dt;
-            }
-
-            //calculate position
-            //movement from the right to the left
-            if (dir == 1) {
-                xBall = sx - dt * v0;
-            }
-            //movement from the left to the right
-            else if (dir == -1) {
-                xBall = sx + dt * v0;
-            }
-            yBall = dBall / 2;
+        if (!rolling) {
+            flyMode();
+            hitTheGround();
+        } else {
+            getBallSpeedAfterCollision();
+            rollingMode();
         }
-        //1st slope 
-        else if (xBall <= pgPoints[2][0] && xBall > pgPoints[3][0]) {
-            //calculate speed
-            applyRollingFriction(CrGrass, rad);
-            //v<=0 -> change direction + speed increasing
-            if (v0 >= 0 && !speedUp) {
-                v0 = v0 - g_ * dt;
-            } else {
-                speedUp = true;
-                v0 = v0 + g_ * dt;
-            }
-
-            //calculate position
-            //movement from the right to the left
-            if (dir == 1) {
-                xBall = sx - dt * v0;
-            }
-            //movement from the left to the right
-            else if (dir == -1) {
-                xBall = sx + dt * v0;
-            }
-            yBall = sy - (xBall - sx1) * tan(rad);
-        }
-        //after 1st slope
-        else if (xBall <= pgPoints[3][0]) {
-            t = t + dt;
-            //calculate speed
-            //apply flow friction 
-            v0x = v0 * cos(rad);
-            v0y = v0 * sin(rad);
-            v0 = sqrt(sq(v0x - vWind) + sq(v0y));
-
-            v0x = v0x - (dt * cw * p * 2 * Math.PI * sq(dBall) * (v0x - vWind) * sqrt(sq(v0x - vWind) + sq(v0y))) / 2 / mBall;
-            v0y = v0y - (dt * cw * p * 2 * Math.PI * sq(dBall) * v0y * sqrt(sq(v0x - vWind) + sq(v0y))) / 2 / mBall;
-
-            v0 = sqrt(sq(v0x) + sq(v0y));
-            xBall = sx2 - v0x * dt;
-            yBall = sy2 + v0y * dt - g * (sq(t) - sq(t - dt)) / 2;
-            sx2 = xBall;
-            sy2 = yBall;
-        }
-
-        //ball reach the end of the right side
-        if (xBall > pgPoints[1][0]) {
-            START = false;
-        }
-        hitTheGround();
         checkScore();
     }
+}
+
+function flyMode() {
+    var dir = getDirection(xBall, sx);
+    sx = xBall; //last position
+
+    //1st plane
+    if (xBall > pgPoints[2][0] && xBall <= pgPoints[1][0]) {
+        speedUp = false; //speed is reducing in inclined plane
+        //calculate speed
+        applyRollingFriction(CrGrass, 0);
+        //v = 0 ->STOP
+        if (v0 >= 0) {
+            v0 = v0 - g_ * dt;
+        }
+
+        //calculate position
+        //movement from the right to the left
+        if (dir == 1) {
+            xBall = sx - dt * v0;
+        }
+        //movement from the left to the right
+        else if (dir == -1) {
+            xBall = sx + dt * v0;
+        }
+        yBall = dBall / 2;
+    }
+    //1st slope 
+    else if (xBall <= pgPoints[2][0] && xBall > pgPoints[3][0]) {
+        //calculate speed
+        applyRollingFriction(CrGrass, radA);
+        //v<=0 -> change direction + speed increasing
+        if (v0 >= 0 && !speedUp) {
+            v0 = v0 - g_ * dt;
+        } else {
+            speedUp = true;
+            v0 = v0 + g_ * dt;
+        }
+
+        //calculate position
+        //movement from the right to the left
+        if (dir == 1) {
+            xBall = sx - dt * v0;
+        }
+        //movement from the left to the right
+        else if (dir == -1) {
+            xBall = sx + dt * v0;
+        }
+        yBall = sy - (xBall - sx1) * tan(radA);
+    }
+    //after 1st slope
+    else if (xBall <= pgPoints[3][0]) {
+        t = t + dt;
+        //calculate speed
+        //apply flow friction 
+        v0x = v0 * cos(radA);
+        v0y = v0 * sin(radA);
+        v0 = sqrt(sq(v0x - vWind) + sq(v0y));
+
+        v0x = v0x - (dt * cw * p * 2 * Math.PI * sq(dBall) * (v0x - vWind) * sqrt(sq(v0x - vWind) + sq(v0y))) / 2 / mBall;
+        v0y = v0y - (dt * cw * p * 2 * Math.PI * sq(dBall) * v0y * sqrt(sq(v0x - vWind) + sq(v0y))) / 2 / mBall;
+
+        v0 = sqrt(sq(v0x) + sq(v0y));
+        xBall = sx2 - v0x * dt;
+        yBall = sy2 + v0y * dt - g * (sq(t) - sq(t - dt)) / 2;
+        sx2 = xBall;
+        sy2 = yBall;
+    }
+    //ball reach the end of the right side
+    if (xBall > pgPoints[1][0]) {
+        START = false;
+    }
+}
+
+function rollingMode() {
+    var dir = getDirection(xBall, sx);
+    sx = xBall; //last position
+
+    //1st plane
+    if (xBall > pgPoints[2][0] && xBall <= pgPoints[1][0]) {
+        speedUp = false; //speed is reducing in inclined plane
+        //calculate speed
+        applyRollingFriction(CrGrass, 0);
+        //v = 0 ->STOP
+        if (v0 >= 0) {
+            v0 = v0 - g_ * dt;
+        }
+
+        //calculate position
+        //movement from the right to the left
+        if (dir == 1) {
+            xBall = sx - dt * v0;
+        }
+        //movement from the left to the right
+        else if (dir == -1) {
+            xBall = sx + dt * v0;
+        }
+        yBall = dBall / 2;
+    }
+
+    //1st slope 
+    else if (xBall <= pgPoints[2][0] && xBall > pgPoints[3][0]) {
+        //calculate speed
+        applyRollingFriction(CrGrass, radA);
+        //v<=0 -> change direction + speed increasing
+        if (v0 >= 0 && !speedUp) {
+            v0 = v0 - g_ * dt;
+        } else {
+            speedUp = true;
+            v0 = v0 + g_ * dt;
+        }
+
+        //calculate position
+        //movement from the right to the left
+        if (dir == 1) {
+            xBall = sx - dt * v0;
+        }
+        //movement from the left to the right
+        else if (dir == -1) {
+            xBall = sx + dt * v0;
+        }
+        yBall = sy - (xBall - sx1) * tan(radA);
+    }
+
+    //2nd slope
+    else if (xBall <= pgPoints[3][0] && xBall > pgPoints[4][0]) {
+        speedUp = true;
+        applyRollingFriction(CrGrass, Math.PI - radB);
+        v0 = v0 + g_ * dt;
+        xBall = sx - dt * v0;
+        yBall = sy2 + (xBall - sx2) * tan(radB);
+    }
+
+    //2nd plane
+    else if (xBall <= pgPoints[4][0] && xBall > pgPoints[5][0]) {
+        speedUp = false;
+        applyRollingFriction(CrGrass, 0);
+        if (v0 >= 0) {
+            v0 = v0 - g_ * dt;
+        }
+        xBall = sx - dt * v0;
+        yBall = dBall / 2;
+    }
+
+    //water
+    else if (xBall <= pgPoints[5][0] && xBall > pgPoints[8][0]) {
+        yBall = pgPoints[6][1] + dBall / 2;
+        START = false;
+    }
+
+    //3rd plane
+    else if (xBall <= pgPoints[8][0] && xBall > pgPoints[9][0]) {
+        speedUp = false;
+        applyRollingFriction(CrGrass, 0);
+        if (v0 >= 0) {
+            v0 = v0 - g_ * dt;
+        }
+        xBall = sx - dt * v0;
+        yBall = dBall / 2;
+    }
+
+    //hole
+    else if (xBall <= pgPoints[9][0] && xBall > pgPoints[12][0]) {
+        yBall = pgPoints[10][1] + dBall / 2;
+        START = false;
+    }
+
+    //4th plane
+    else if (xBall <= pgPoints[12][0] && xBall > pgPoints[13][0]) {
+        speedUp = false;
+        applyRollingFriction(CrGrass, 0);
+        if (v0 >= 0) {
+            v0 = v0 - g_ * dt;
+        }
+        if (dir == 1) {
+            xBall = sx - dt * v0;
+        } else if (dir == -1) {
+            xBall = sx + dt * v0;
+        }
+        yBall = dBall / 2;
+    }
+
+    //3rd slope
+    else if (xBall <= pgPoints[13][0] && xBall > pgPoints[14][0]) {
+        applyRollingFriction(CrGrass, radC);
+        speedUp = true;
+        v0 = v0 + g_ * dt;
+        xBall = sx + dt * v0;
+        yBall = sy - (xBall - sx3) * tan(radC);
+    }
+
+    if (xBall > pgPoints[1][0]) {
+        START = false;
+    }
+}
+
+function getBallSpeedAfterCollision() {
+    directionAngle = Math.atan(v0y / v0x);
+    vz = v0 * Math.cos(normalAngle - directionAngle);
+    vt = v0 * Math.sin(normalAngle - directionAngle);
+    v0 = sqrt(sq(vz) + sq(vt));
 }
 
 function checkScore() {
@@ -248,10 +387,9 @@ function hitTheGround() {
         lSegment = Math.sqrt(Math.pow(pgPoints[i][0] - pgPoints[i + 1][0], 2) + Math.pow(pgPoints[i][1] - pgPoints[i + 1][1], 2));
         if (lPath >= 0 && lPath <= lSegment) {
             vecP = vecS.div(Math.sqrt(Math.pow(pgPoints[i][0], 2) + Math.pow(pgPoints[i][1], 2))).mult(lPath);
-            if (d <= dBall / 2) {
+            if (d <= dBall) {
                 normalAngle = Math.atan(yBall - pgPoints[i][1], yBall - pgPoints[i][0]);
-                ballRolling = true;
-                START = false;
+                rolling = true;
                 console.log("Distance: " + (d * M));
                 console.log("Normal Angle: " + toDegree(normalAngle));
             }

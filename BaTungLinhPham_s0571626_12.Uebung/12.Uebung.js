@@ -15,7 +15,7 @@ var playgroundWidth = basicLength * 23.9 / 16.9; // [m]
 
 //Ball
 var xBall, yBall; // golf ball
-var dBall = 0.1; // ball diameter in [m]
+var dBall = 0.048; // ball diameter in [m]
 var ballColor = "#aaaa00"; //ball color
 var mBall = 0.0459; //[kg]
 
@@ -44,9 +44,9 @@ var dt;
 const g = 9.81;
 var g_;
 var g0_ = 0;
-var rad;
+var radA, radB, radC;
 
-var sx, sx1, sx2;
+var sx, sx1, sx2, sx3;
 var sy, sy2;
 
 var speedUp;
@@ -85,9 +85,11 @@ var hitTheBall = false;
 var initialized = false;
 
 var vecO, vecS, vecP;
-var d, lPath, lSegment, normalAngle;
+var d, lPath, lSegment, normalAngle, directionAngle;
 
-var ballRolling = false;
+var vz, vt;
+
+var rolling = false;
 
 function setup() { /* prepare program */
     frameRate(60);
@@ -118,7 +120,11 @@ function setup() { /* prepare program */
     dt = 1 / fps;
 
     translate(x0, y0);
-    rad = getAngleBetween(pgPoints[1][0], pgPoints[1][1], pgPoints[2][0], pgPoints[2][1], pgPoints[2][0], pgPoints[2][1], pgPoints[3][0], pgPoints[3][1]);
+
+    radA = getAngleBetween(pgPoints[1][0], pgPoints[1][1], pgPoints[2][0], pgPoints[2][1], pgPoints[2][0], pgPoints[2][1], pgPoints[3][0], pgPoints[3][1]);
+    radB = getAngleBetween(pgPoints[3][0], pgPoints[3][1], pgPoints[4][0], pgPoints[4][1], pgPoints[4][0], pgPoints[4][1], pgPoints[5][0], pgPoints[5][1]);
+    radC = getAngleBetween(pgPoints[12][0], pgPoints[12][1], pgPoints[13][0], pgPoints[13][1], pgPoints[13][0], pgPoints[13][1], pgPoints[14][0], pgPoints[14][1]);
+
     resetBallState();
 }
 
@@ -168,7 +174,7 @@ function draw() {
     playGround();
 
     //Golf ball
-    // if (ballRolling) {
+    // if (rolling) {
     //     push();
     //     rotate(normalAngle);
     //     fill(ballColor);
