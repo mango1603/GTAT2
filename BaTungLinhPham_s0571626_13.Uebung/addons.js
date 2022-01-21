@@ -109,6 +109,8 @@ function resetBallState() {
 }
 
 function newBallState() {
+    dPutter = 0.08;
+    lengthPutter = 3 * dPutter;
     sx = 1;
     sx1 = pgPoints[2][0];
     sx2 = pgPoints[3][0];
@@ -116,7 +118,7 @@ function newBallState() {
     sy = dBall / 2;
     sy2 = pgPoints[3][1] + sy;
     xBall = 0;
-    yBall = dBall / 2;
+    yBall = dBall / 2 + 0.8 * dPutter;
     START = false;
     t = 0;
     dragging = false;
@@ -180,7 +182,6 @@ function flyMode() {
         else if (dir == -1) {
             xBall = sx + dt * v0;
         }
-        yBall = dBall / 2;
     }
     //1st slope 
     else if (xBall <= pgPoints[2][0] && xBall > pgPoints[3][0]) {

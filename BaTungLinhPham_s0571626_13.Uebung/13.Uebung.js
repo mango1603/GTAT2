@@ -73,8 +73,7 @@ var springConst = 40; // [N/m]
 var attenuation = 4; // [s-1]
 var omega;
 let golfStick;
-var lengthPutter = 0.45 * bodyHeight;
-var dPutter = 0.15;
+var lengthPutter, dPutter;
 var putterColor = "#aa0000";
 
 var dragging = false;
@@ -173,19 +172,9 @@ function draw() {
     scale(1, -1);
     playGround();
 
-    //Golf ball
-    // if (rolling) {
-    //     push();
-    //     rotate(normalAngle);
-    //     fill(ballColor);
-    //     shotBall();
-    //     ellipse(xBall * M, yBall * M, dBall * M);
-    //     pop();
-    // } else {
     fill(ballColor);
     shotBall();
     ellipse(xBall * M, yBall * M, dBall * M);
-    // }
 
     //Zero-point marker
     push();
@@ -196,7 +185,7 @@ function draw() {
     pop();
 
     //Golf Stick
-    golfStick = new GolfStick(0, dPutter * M / 2, 0, 0.7 * lengthPutter * M, dPutter * M);
+    golfStick = new GolfStick(0, dPutter * M * 0.7, 0, lengthPutter * M, dPutter * M);
     golfStick.drawGolfStick();
 
     pop();
