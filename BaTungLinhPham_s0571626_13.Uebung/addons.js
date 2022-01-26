@@ -124,7 +124,8 @@ function newBallState() {
     dragging = false;
     dragged = false;
     vStick = 0;
-    sStick = 0;
+    sxStick = 0;
+    syStick = 0;
     hitTheBall = false;
     initialized = false;
     v0 = 0;
@@ -165,7 +166,8 @@ function flyMode() {
 
     //1st plane
     if (xBall > pgPoints[2][0] && xBall <= pgPoints[1][0]) {
-        speedUp = false; //speed is reducing in inclined plane
+        speedUp = false;
+        //speed is reducing in inclined plane
         //calculate speed
         applyRollingFriction(CrGrass, 0);
         //v = 0 ->STOP
@@ -426,11 +428,12 @@ class GolfStick {
     }
 
     drawGolfStick() {
-        if (dragging && (mouseX - x0) >= this.x1) {
-            sStick = (mouseX - x0) + this.offsetX;
+        if (dragging && (mouseX - x0) >= this.x1 && -(mouseY - y0) >= 0 && -(mouseY - y0) <= 3 * this.diameter) {
+            sxStick = (mouseX - x0) + this.offsetX;
+            syStick = -(mouseY - y0) - this.offsetY;
         }
 
-        if (sStick < this.x1 && dragged && !initialized) {
+        if (sxStick < this.x1 && dragged && !initialized) {
             hitTheBall = true;
             initialized = true;
             v0 = Math.abs(vStick * 0.01) * 2;
@@ -438,29 +441,31 @@ class GolfStick {
         }
 
         if (dragged) {
-            if (sStick >= this.x1 && !hitTheBall) {
-                vStick = vStick - (2 * vStick + sq(omega) * sStick) * dt
+            if (sxStick >= this.x1 && !hitTheBall) {
+                vStick = vStick - (2 * vStick + sq(omega) * sxStick) * dt
             } else {
-                vStick = vStick - (2 * attenuation * vStick + sq(omega) * sStick) * dt
+                vStick = vStick - (2 * attenuation * vStick + sq(omega) * sxStick) * dt
             }
         }
-        sStick = sStick + vStick * dt;
+
+        sxStick = sxStick + vStick * dt;
 
         //Draw
         strokeWeight(2);
-        line(sStick, this.y1, sStick, this.y2);
+        line(sxStick, syStick, sxStick, this.y2);
         fill(putterColor);
         strokeWeight(1);
-        ellipse(sStick, this.y1, this.diameter);
+        ellipse(sxStick, syStick, this.diameter);
     }
 
     pressGolfStick() {
-        if (mouseX > sStick + x0 - dPutter * M / 2 &&
-            mouseX < sStick + x0 + dPutter * M / 2 &&
+        if (mouseX > sxStick + x0 - dPutter * M / 2 &&
+            mouseX < sxStick + x0 + dPutter * M / 2 &&
             mouseY > this.y1 + y0 - 3 * dPutter * M / 2 &&
             mouseY < this.y1 + y0 - dPutter * M / 2 && !dragged) {
             dragging = true;
-            this.offsetX = sStick - (mouseX - x0);
+            this.offsetX = sxStick - (mouseX - x0);
+            this.offsetY = syStick + (mouseY - y0);
         }
     }
 

@@ -79,7 +79,8 @@ var putterColor = "#aa0000";
 var dragging = false;
 var dragged = false;
 var vStick = 0;
-var sStick = 0;
+var sxStick = 0;
+var syStick = 0;
 var hitTheBall = false;
 var initialized = false;
 
@@ -180,8 +181,7 @@ function draw() {
     push();
     stroke(0);
     strokeWeight(2);
-    line(5, 0, -5, 0);
-    line(0, 5, 0, -5);
+    line(0, dPutter * M * 0.8, 0, 0);
     pop();
 
     //Golf Stick
