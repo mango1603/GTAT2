@@ -46,8 +46,8 @@ var g_;
 var g0_ = 0;
 var radA, radB, radC;
 
-var sx, sx1, sx2, sx3;
-var sy, sy2;
+var sx0, sx, sx1, sx2, sx3;
+var sy0, sy, sy2;
 
 var speedUp;
 var score;
@@ -62,18 +62,19 @@ var cw = 0.45; //
 
 //Wind Speed
 var vWind;
-var vWindMax = 125 / 9; //[m / s] - 50km/h = 125/9 m/s 
+var vWindMax = 125 / 18; //[m / s] - 50km/h = 125/9 m/s 
 
 var totalAttemptsTxt, totalHolesTxt, windSpeedTxt;
 var totalAttempts, totalHoles;
 
 //Golf Stick
-var m = 1; // [kg]
+var mStick = 1; // [kg]
 var springConst = 40; // [N/m]
 var attenuation = 4; // [s-1]
 var omega;
 let golfStick;
-var lengthPutter, dPutter;
+var lengthPutter;
+var dPutter = 0.08;
 var putterColor = "#aa0000";
 
 var dragging = false;
@@ -87,20 +88,21 @@ var initialized = false;
 var vecO, vecS, vecP;
 var d, lPath, lSegment, normalAngle, directionAngle;
 
-var vz, vt;
+var vz, vt, h, d;
 
 var rolling = false;
+var hit, hitDistance;
 
 function setup() { /* prepare program */
     frameRate(60);
     createCanvas(windowWidth, windowHeight);
     evaluateConstants();
-
-    omega = sqrt(springConst / m);
-
     M = 0.85 * canvasWidth / playgroundWidth;
     x0 = 25.0 * canvasWidth / 29.7;
     y0 = 15.3 * canvasHeight / 21.0;
+
+    omega = sqrt(springConst / mStick);
+    hitDistance = (dBall * M / 2 + dPutter * M / 2);
 
     newBtnXPos = 80 * gridX;
     newBtnYPos = 90 * gridY;
